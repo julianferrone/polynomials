@@ -138,3 +138,28 @@ def test_zero_polynomial_is_zero():
 @given(nonzero_polynomial())
 def test_nonzero_polynomial_is_not_zero(a):
     assert not a.is_zero
+
+
+# ========
+# Division
+# ========
+
+
+@given(polynomial())
+def test_division_identity_element(a):
+    lhs_quotient, lhs_remainder = divmod(a, Polynomial.one())
+    assert lhs_quotient == a
+    assert lhs_remainder == Polynomial.zero()
+
+
+@given(polynomial(), nonzero_polynomial())
+def test_division_is_inverse_of_multiplication(a, b):
+    quotient, remainder = divmod(a, b)
+    inverse = quotient * b + remainder
+    assert a == inverse
+
+
+@given(nonzero_polynomial())
+def test_division_by_one_is_multiplicative_inverse(a):
+    lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
+    assert lhs_quotient * a + lhs_remainder == Polynomial.one()
