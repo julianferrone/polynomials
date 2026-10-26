@@ -5,6 +5,10 @@ from collections import defaultdict
 class Polynomial:
     coeffs: defaultdict[int, int]
 
+    # ------------
+    # Constructors
+    # ------------
+
     def __init__(self, coeffs: dict[int, int]) -> Polynomial:
         self.coeffs = defaultdict(
             int, {power: coeff for power, coeff in coeffs.items() if coeff != 0}
@@ -30,8 +34,16 @@ class Polynomial:
     def one(cls) -> Polynomial:
         return cls.from_coeffs(1)
 
+    # ------------------
+    # Printing to String
+    # ------------------
+
     def __repr__(self):
         return f"Polynomial({self.coeffs!r})"
+
+    # --------------------
+    # Algebraic Operations
+    # --------------------
 
     def __eq__(self, other):
         return self.coeffs == other.coeffs
