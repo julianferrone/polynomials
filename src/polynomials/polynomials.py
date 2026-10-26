@@ -41,6 +41,29 @@ class Polynomial:
     def __repr__(self):
         return f"Polynomial({self.coeffs!r})"
 
+    # ----------
+    # Properties
+    # ----------
+
+    @property
+    def is_zero(self) -> bool:
+        if self.coeffs:
+            return True
+        return False
+
+    @property
+    def degree(self) -> int:
+        # Convention for empty polynomials is that they have a degree of
+        # negative infinity, but this would require returning a float.
+        if self.is_zero:
+            return -1
+        return max(self.coeffs.keys())
+
+    @property
+    def leading_term(self) -> Polynomial:
+        term = max(self.coeffs.items(), default=(0, 0), key=lambda pair: pair[0])
+        return Polynomial(dict(term))
+
     # --------------------
     # Algebraic Operations
     # --------------------
