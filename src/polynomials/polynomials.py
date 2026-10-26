@@ -57,3 +57,12 @@ class Polynomial:
         for power, coeff in other.coeffs.items():
             coeffs[power] += coeff
         return Polynomial(coeffs)
+
+    def __neg__(self):
+        coeffs = defaultdict(int)
+        for power, coeff in self.coeffs.items():
+            coeffs[power] -= coeff
+        return Polynomial(coeffs)
+
+    def __sub__(self, other):
+        return self + -other
