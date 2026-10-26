@@ -48,3 +48,27 @@ def test_addition_is_commutative(a, b, c):
     lhs = (a + b) + c
     rhs = a + (b + c)
     assert lhs == rhs
+
+
+# ===========
+# Subtraction
+# ===========
+
+
+@given(polynomial())
+def test_subtraction_identity_element(a):
+    rhs = a - Polynomial.zero()
+    assert a == rhs
+
+
+@given(polynomial())
+def test_subtraction_of_self_is_zero(a):
+    rhs = a - a
+    assert Polynomial.zero() == rhs
+
+
+@given(polynomial(), polynomial())
+def test_subtraction_is_anticommutative(a, b):
+    lhs = a - b
+    rhs = -(b - a)
+    assert lhs == rhs
