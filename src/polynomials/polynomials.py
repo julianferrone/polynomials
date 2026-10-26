@@ -66,3 +66,10 @@ class Polynomial:
 
     def __sub__(self, other):
         return self + -other
+
+    def __mul__(self, other):
+        coeffs = defaultdict(int)
+        for power_a, coeff_a in self.coeffs.items():
+            for power_b, coeff_b in other.coeffs.items():
+                coeffs[power_a + power_b] += coeff_a * coeff_b
+        return Polynomial(coeffs)
