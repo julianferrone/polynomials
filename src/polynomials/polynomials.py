@@ -1,17 +1,19 @@
 from __future__ import annotations
 from collections import defaultdict
+from copy import deepcopy
+from fractions import Fraction
 
 
 class Polynomial:
-    coeffs: defaultdict[int, int]
+    coeffs: defaultdict[int, Fractional]
 
     # ------------
     # Constructors
     # ------------
 
-    def __init__(self, coeffs: dict[int, int]) -> Polynomial:
+    def __init__(self, coeffs: dict[int, int | Fraction]) -> Polynomial:
         self.coeffs = defaultdict(
-            int, {power: coeff for power, coeff in coeffs.items() if coeff != 0}
+            int, {power: Fraction(coeff) for power, coeff in coeffs.items() if coeff != 0}
         )
 
     @classmethod
@@ -84,7 +86,7 @@ class Polynomial:
         # > ...
         # > Each operation can accept inputs with signed counts, but the output
         # > will exclude results with counts of zero or below.
-        coeffs = defaultdict(int)
+        coeffs = defaultdict(Fraction)
         for power, coeff in self.coeffs.items():
             coeffs[power] += coeff
         for power, coeff in other.coeffs.items():
@@ -92,7 +94,7 @@ class Polynomial:
         return Polynomial(coeffs)
 
     def __neg__(self):
-        coeffs = defaultdict(int)
+        coeffs = defaultdict(Fraction)
         for power, coeff in self.coeffs.items():
             coeffs[power] -= coeff
         return Polynomial(coeffs)
@@ -101,7 +103,7 @@ class Polynomial:
         return self + -other
 
     def __mul__(self, other):
-        coeffs = defaultdict(int)
+        coeffs = defaultdict(Fraction)
         for power_a, coeff_a in self.coeffs.items():
             for power_b, coeff_b in other.coeffs.items():
                 coeffs[power_a + power_b] += coeff_a * coeff_b
