@@ -72,3 +72,51 @@ def test_subtraction_is_anticommutative(a, b):
     lhs = a - b
     rhs = -(b - a)
     assert lhs == rhs
+
+
+# ==============
+# Multiplication
+# ==============
+
+
+@given(polynomial())
+def test_multiplication_identity_element(a):
+    rhs = a * Polynomial.one()
+    assert a == rhs
+
+
+@given(polynomial())
+def test_multiplication_absorbing_element(a):
+    zero = Polynomial.zero()
+    rhs = a * zero
+    assert zero == rhs
+
+
+@given(polynomial(), polynomial())
+def test_multiplication_is_commutative(a, b):
+    lhs = a * b
+    rhs = b * a
+    assert lhs == rhs
+
+
+@given(polynomial(), polynomial(), polynomial())
+def test_multiplication_is_associative(a, b, c):
+    lhs = (a * b) * c
+    rhs = a * (b * c)
+    assert lhs == rhs
+
+
+@given(polynomial(), polynomial(), polynomial())
+def test_multiplication_distributes_over_addition(a, b, c):
+    lhs = a * (b + c)
+    rhs = a * b + a * c
+    assert lhs == rhs
+
+
+@given(polynomial())
+def test_multiplication_by_minus_one_is_additive_inverse(a):
+    lhs = -Polynomial.one() * a
+    rhs = -a
+    assert lhs == rhs
+    sum_ = rhs + a
+    assert sum_ == Polynomial.zero()
