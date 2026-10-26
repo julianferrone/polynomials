@@ -47,9 +47,7 @@ class Polynomial:
 
     @property
     def is_zero(self) -> bool:
-        if self.coeffs:
-            return True
-        return False
+        return False if self.coeffs else True
 
     @property
     def degree(self) -> int:
