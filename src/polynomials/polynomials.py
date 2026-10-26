@@ -61,9 +61,8 @@ class Polynomial:
         return max(self.coeffs.keys())
 
     @property
-    def leading_term(self) -> Polynomial:
-        term = max(self.coeffs.items(), default=(0, 0), key=lambda pair: pair[0])
-        return Polynomial(dict(term))
+    def leading_term(self) -> (int, int):
+        return max(self.coeffs.items(), default=(0, 0), key=lambda pair: pair[0])
 
     # --------------------
     # Algebraic Operations
@@ -109,3 +108,23 @@ class Polynomial:
             for power_b, coeff_b in other.coeffs.items():
                 coeffs[power_a + power_b] += coeff_a * coeff_b
         return Polynomial(coeffs)
+
+    def __divmod__(self, other):
+        if other.is_zero:
+            raise ValueError("Can't divide by zero Polynomial")
+
+        quotient = Polynomial.zero()
+        remainder = deepcopy(self)
+
+        while not remainder.is_zero and remainder.degree >= other.degree:
+            power_r, coeff_r = remainder.leading_term
+            power_d, coeff_d = other.leading_term
+            # d for denominator
+            power_tmp = power_r - power_d
+            coeff_tmp = Fraction(coeff_r, coeff_d)
+            tmp = Polynomial({power_tmp: coeff_tmp})
+
+            quotient += tmp
+            remainder -= tmp * other
+
+        return (quotient, remainder)
