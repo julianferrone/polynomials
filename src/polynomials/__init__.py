@@ -1,2 +1,1 @@
-def hello() -> str:
-    return "Hello from polynomials!"
+from .polynomials import Polynomial
