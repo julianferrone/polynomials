@@ -1,0 +1,36 @@
+---
+convention:
+  # commitMessageRegexPattern: ^(?<type>\w+)(?:\((?<scope>[^()]+)\))?(?<breaking>!)?:\s*(?<description>.+)
+  commitTypes:
+  - feat     # Commits that add, adjust or remove a feature to/of/from the API or UI
+  - fix      # Commits that fix a bug of a preceded `feat` commit
+  - refactor # Commits that rewrite/restructure your code, however do not change any behaviour
+  - perf     # Commits that are special `refactor` commits or that improve performance
+  - style    # Commits that do not affect the meaning (white-space, formatting, missing semicolons, etc.)
+  - test     # Commits that add missing tests or correcting existing tests
+  - build    # Commits that affect build components like build tool, ci pipeline, dependencies, project version, etc.
+  - ops      # Commits that affect operational components like infrastructure, deployment, backup, recovery, etc.
+  - docs     # Commits that affect documentation only
+  - chore    # Miscellaneous commits e.g. modifying `.gitignore`
+  - merge
+  commitScopes: []
+  releaseTagGlobPattern: v[0-9]*.[0-9]*.[0-9]*
+changelog:
+  commitTypes:
+  - feat
+  - fix
+  - perf
+  - merge
+  includeInvalidCommits: true
+  commitScopes: []
+  commitIgnoreRegexPattern: "^WIP "
+  headlines:
+    feat: Features
+    fix: Bug Fixes
+    perf: Performance Improvements
+    merge: Merges
+    breakingChange: BREAKING CHANGES
+  commitUrl: https://github.com/qoomon/git-conventional-commits/commit/%commit%
+  commitRangeUrl: https://github.com/qoomon/git-conventional-commits/compare/%from%...%to%?diff=split
+  issueRegexPattern: "#[0-9]+"
+  issueUrl: https://github.com/qoomon/git-conventional-commits/issues/%issue%
