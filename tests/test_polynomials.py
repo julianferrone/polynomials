@@ -12,6 +12,10 @@ def polynomial():
     return st.builds(Polynomial.from_coeffs, st.lists(st.integers()))
 
 
+def nonzero_polynomial():
+    return polynomial().filter(lambda p: p != Polynomial.zero())
+
+
 # ========
 # Creation
 # ========
@@ -120,3 +124,17 @@ def test_multiplication_by_minus_one_is_additive_inverse(a):
     assert lhs == rhs
     sum_ = rhs + a
     assert sum_ == Polynomial.zero()
+
+
+# =======
+# Is Zero
+# =======
+
+
+def test_zero_polynomial_is_zero():
+    assert Polynomial.zero().is_zero
+
+
+@given(nonzero_polynomial())
+def test_nonzero_polynomial_is_not_zero(a):
+    assert not a.is_zero
