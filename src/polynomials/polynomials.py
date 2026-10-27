@@ -13,8 +13,12 @@ class Polynomial:
 
     def __init__(self, coeffs: dict[int, int | Fraction]) -> Polynomial:
         self.coeffs = defaultdict(
-            int,
-            {power: Fraction(coeff) for power, coeff in coeffs.items() if coeff != 0},
+            Fraction,
+            {
+                power: Fraction(coeff)
+                for power, coeff in coeffs.items()
+                if power >= 0 and coeff != 0
+            },
         )
 
     @classmethod
