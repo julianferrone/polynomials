@@ -16,6 +16,10 @@ def nonzero_polynomial():
     return polynomial().filter(lambda p: p != Polynomial.zero())
 
 
+def constant_polynomial():
+    return st.builds(Polynomial.from_coeffs, st.fractions())
+
+
 # ========
 # Creation
 # ========
@@ -163,3 +167,51 @@ def test_division_is_inverse_of_multiplication(a, b):
 def test_division_by_one_is_multiplicative_inverse(a):
     lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
     assert lhs_quotient * a + lhs_remainder == Polynomial.one()
+
+
+# ===============
+# Differentiation
+# ===============
+
+
+@given(nonzero_polynomial())
+def test_differentiation_lowers_polynomial_degree(a):
+    a_diff = a.d()
+    assert a.degree > a_diff.degree
+
+
+def test_derivative_of_zero_is_zero():
+    lhs = Polynomial.zero()
+    rhs = lhs.d()
+    assert lhs == rhs
+
+
+@given(constant_polynomial())
+def test_differentiation_constant_term_rule(a):
+    lhs = a.d()
+    rhs = Polynomial.zero()
+    assert lhs == rhs
+
+@given(constant_polynomial(), polynomial())
+def test_differentiation_constant_factor_rule(a, b):
+    lhs = (a * b).d()
+    rhs = a * b.d()
+    assert lhs == rhs
+
+@given(polynomial(), polynomial())
+def test_differentiation_sum_rule(a, b):
+    lhs = (a + b).d()
+    rhs = a.d() + b.d()
+    assert lhs == rhs
+
+@given(polynomial(), polynomial())
+def test_differentiation_difference_rule(a, b):
+    lhs = (a - b).d()
+    rhs = a.d() - b.d()
+    assert lhs == rhs
+
+@given(polynomial(), polynomial())
+def test_differentiation_product_rule(a, b):
+    lhs = (a * b).d()
+    rhs = a.d() * b + a * b.d()
+    assert lhs == rhs
