@@ -9,7 +9,7 @@ import pytest
 
 
 def polynomial():
-    return st.builds(Polynomial.from_coeffs, st.lists(st.integers()))
+    return st.builds(Polynomial.from_coeffs, st.lists(st.fractions()))
 
 
 def nonzero_polynomial():
