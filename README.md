@@ -28,8 +28,8 @@ of degree):
 ```python
 from polynomials import Polynomial
 
-p = Polynomial.from_coeffs(3, 2, 1)
-q = Polynomial.from_coeffs(4, 5)
+p = Polynomial(3, 2, 1)
+q = Polynomial(4, 5)
 
 print(p)
 print(q)
