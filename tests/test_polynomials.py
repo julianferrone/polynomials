@@ -9,7 +9,7 @@ import pytest
 
 
 def polynomial(**kwargs):
-    return st.builds(Polynomial.from_coeffs, st.lists(st.fractions(), **kwargs))
+    return st.builds(Polynomial, st.lists(st.fractions(), **kwargs))
 
 
 def nonzero_polynomial(**kwargs):
@@ -17,7 +17,7 @@ def nonzero_polynomial(**kwargs):
 
 
 def constant_polynomial():
-    return st.builds(Polynomial.from_coeffs, st.fractions())
+    return st.builds(Polynomial, st.fractions())
 
 
 # ========
@@ -27,7 +27,7 @@ def constant_polynomial():
 
 def test_zero():
     lhs = Polynomial.zero()
-    rhs = Polynomial.from_coeffs()
+    rhs = Polynomial()
     assert lhs == rhs
 
 
