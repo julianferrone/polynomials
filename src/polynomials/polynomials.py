@@ -309,3 +309,12 @@ class Polynomial:
     def d(self):
         coeffs = {(power - 1): power * coeff for power, coeff in self.coeffs.items()}
         return Polynomial(coeffs)
+
+    def __call__(self, x):
+        return self.eval(x)
+
+    def eval(self, x):
+        result = 0
+        for power, coeff in self.coeffs.items():
+            result += coeff * x ** power
+        return result
