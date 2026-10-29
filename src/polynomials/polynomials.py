@@ -264,6 +264,44 @@ class Polynomial:
 
         return (quotient, remainder)
 
+    def __pow__(self, n):
+        return self.fast_exp(n)
+
+    def fast_exp(self, n):
+        if n < 0:
+            raise ValueError("Can't exponentiate by negative integer")
+        if self.is_zero and n == 0:
+            raise ValueError("Can't exponentiate zero Polynomial by zero")
+        if self.is_zero:
+            return Polynomial.zero()
+        if n == 0:
+            return Polynomial.one()
+        x = deepcopy(self)
+        y = Polynomial.one()
+        while n > 1:
+            if n % 2 == 1:
+                y = x * y
+                n = n - 1
+            x = x * x
+            n = n // 2
+        p = x * y
+        assert isinstance(p, Polynomial)
+        return p
+
+    def slow_exp(self, n):
+        if n < 0:
+            raise ValueError("Can't exponentiate by negative integer")
+        if self.is_zero and n == 0:
+            raise ValueError("Can't exponentiate zero Polynomial by zero")
+        if self.is_zero:
+            return Polynomial.zero()
+        if n == 0:
+            return Polynomial.one()
+        p = Polynomial.one()
+        for _ in range(n):
+            p *= self
+        return p
+
     def d(self):
         coeffs = {(power - 1): power * coeff for power, coeff in self.coeffs.items()}
         return Polynomial(coeffs)
