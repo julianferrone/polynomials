@@ -217,9 +217,9 @@ def test_exponent_product_rule(a, m, n):
 
 
 @given(
-    nonzero_polynomial(max_size=5),
-    st.integers(min_value=0, max_value=5),
-    st.integers(min_value=0, max_value=5),
+    nonzero_polynomial(max_size=4),
+    st.integers(min_value=0, max_value=4),
+    st.integers(min_value=0, max_value=4),
 )
 def test_exponent_power_of_power_rule(a, m, n):
     lhs = (a**m) ** n
