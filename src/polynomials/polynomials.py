@@ -13,61 +13,56 @@ class Polynomial:
     # Constructors
     # ------------
 
-    def __init__(self, coeffs: dict[int, int | Fraction]) -> Polynomial:
-        """
-        Initialises a Polynomial from a mapping of powers to coefficients.
+    def __init__(self, *args):
+        """Initialise a polynomial from a sequence of coefficients or a mapping
+        of (integer) exponents to coefficients.
 
         Args:
-            coeffs (dict[int, int | Fraction]): The mapping of integer powers
-            to integer or Fraction coefficients.
+            *args: Polynomial coefficients supplied as positional arguments, in
+                standard form (ordered from highest degree to the constant term).
+                Alternatively, coefficients may be supplied as a list or tuple
+                in the same order, or as a mapping of exponents to coefficients.
 
-        Returns:
-            Polynomial: A polynomial with Fraction coefficients.
+        Examples:
+            Initialise using positional arguments:
+                >>> print(Polynomial(1, 2, 3))
+                x^2 + 2x + 3
 
-        Example:
-        >>> str(Polynomial({0: 3, 1: 2, 2: 1}))
-        'x^2 + 2x + 3'
+            Initialise using a tuple:
+                >>> print(Polynomial((2, -3, 5)))
+                2x^2 - 3x + 5
+
+            Initialise using a list:
+                >>> print(Polynomial([1, 2, 5, 14]))
+                x^3 + 2x^2 + 5x + 14
+
+            Initialise using a mapping:
+                >>> print(Polynomial({3: 4, 0: -1}))
+                4x^3 - 1
         """
-        self.coeffs = defaultdict(
-            Fraction,
-            {
-                power: Fraction(coeff)
-                for power, coeff in coeffs.items()
-                if power >= 0 and coeff != 0
-            },
-        )
+        # Unpack if provided a single list/tuple/dictionary
+        arg = args[0] if len(args) == 1 else args
 
-    @classmethod
-    def from_coeffs(cls, *args) -> Polynomial:
-        """
-        Initialises a Polynomial from a standard-form list of coefficients
-        (i.e. in descending order by exponent).
+        if isinstance(arg, dict):
+            coeffs = arg
+        elif isinstance(arg, (list, tuple)):
+            # We need to iterate in reverse order so that users can
+            # define the polynomials in standard form (i.e. highest
+            # powers first:
+            #
+            # >>> print(Polynomial(1, -2, 3))
+            # x^2 - 2x + 3
+            coeffs = dict(enumerate(reversed(arg)))
+        else:
+            # Handle the constant term case
+            coeffs = {0: arg}
 
-        Args:
-            *args: Coefficients in descending order of power, either as
-            positional arguments or as a single list or tuple.
-
-        Returns:
-            Polynomial: The polynomial represented by the given coefficients.
-
-        Example:
-
-        >>> str(Polynomial.from_coeffs(1, 2, 3))
-        'x^2 + 2x + 3'
-        >>> str(Polynomial.from_coeffs(-3, 0))
-        '-3x'
-        >>> str(Polynomial.from_coeffs(4, 0, 0, -1))
-        '4x^3 - 1'
-        """
-        if len(args) == 1 and isinstance(args[0], (list, tuple)):
-            args = args[0]
-        # We need to iterate in reverse order so that users can
-        # define the polynomials in standard form (i.e. highest
-        # powers first:
-        #
-        # from_coeffs(1, -2, 3) == x^2 - 2x + 3
-        coeffs = dict(enumerate(reversed(args)))
-        return cls(coeffs)
+        normalised_coeffs = {
+            power: Fraction(coeff)
+            for power, coeff in coeffs.items()
+            if power >= 0 and coeff != 0
+        }
+        self.coeffs = defaultdict(Fraction, normalised_coeffs)
 
     @classmethod
     def zero(cls) -> Polynomial:
