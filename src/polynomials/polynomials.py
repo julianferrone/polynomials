@@ -50,8 +50,10 @@ class Polynomial:
         return self.coeffs.get(power, 0)
 
     def __setitem__(self, power, coeff):
-        if coeff == 0 or 0 > power:
+        if 0 > power:
             pass
+        elif coeff == 0:
+            del self[power]
         else:
             self.coeffs[power] = coeff
 
