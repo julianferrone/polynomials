@@ -243,7 +243,7 @@ class Polynomial:
         return p
 
     def scale(self, x) -> Polynomial:
-        return Polynomial((power: coeff * n for power, coeff in self))
+        return Polynomial({power: coeff * n for power, coeff in self})
 
     def factor_out(self, n: int) -> Polynomial:
         p = Polynomial.zero()
