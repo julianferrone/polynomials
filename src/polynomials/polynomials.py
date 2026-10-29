@@ -60,9 +60,7 @@ class Polynomial:
 
     def slice(self, start, end):
         coeffs = {
-            power: coeff
-            for power, coeff in self.coeffs.items()
-            if start <= power and power < end
+            power: coeff for power, coeff in self if start <= power and power < end
         }
         return Polynomial(coeffs)
 
@@ -79,7 +77,7 @@ class Polynomial:
                 power = "" if power == 1 else f"^{power}"
                 return f"{coeff}x{power}"
 
-        parts = iter(sorted(self.coeffs.items(), reverse=True))
+        parts = iter(sorted(self, reverse=True))
 
         # As we filter out powers with zero coefficients when constructing a
         # Polynomial, a zero Polynomial will have an empty Counter and so
@@ -118,7 +116,7 @@ class Polynomial:
 
     @property
     def leading_term(self) -> (int, int):
-        return max(self.coeffs.items(), default=(0, 0), key=lambda pair: pair[0])
+        return max(self, default=(0, 0), key=lambda pair: pair[0])
 
     # --------------------
     # Algebraic Operations
@@ -147,15 +145,15 @@ class Polynomial:
         # > Each operation can accept inputs with signed counts, but the output
         # > will exclude results with counts of zero or below.
         coeffs = defaultdict(Fraction)
-        for power, coeff in self.coeffs.items():
+        for power, coeff in self:
             coeffs[power] += coeff
-        for power, coeff in other.coeffs.items():
+        for power, coeff in other:
             coeffs[power] += coeff
         return Polynomial(coeffs)
 
     def __neg__(self):
         coeffs = defaultdict(Fraction)
-        for power, coeff in self.coeffs.items():
+        for power, coeff in self:
             coeffs[power] -= coeff
         return Polynomial(coeffs)
 
@@ -236,14 +234,14 @@ class Polynomial:
     def slow_mul(self, other):
         # n^2 multiplication
         coeffs = defaultdict(Fraction)
-        for power_a, coeff_a in self.coeffs.items():
-            for power_b, coeff_b in other.coeffs.items():
+        for power_a, coeff_a in self:
+            for power_b, coeff_b in other:
                 coeffs[power_a + power_b] += coeff_a * coeff_b
         return Polynomial(coeffs)
 
     def factor_out(self, n: int) -> Polynomial:
         p = Polynomial.zero()
-        for power, coeff in self.coeffs.items():
+        for power, coeff in self:
             p[power - n] = coeff
         return p
 
@@ -310,7 +308,7 @@ class Polynomial:
     # ...................
 
     def d(self):
-        coeffs = {(power - 1): power * coeff for power, coeff in self.coeffs.items()}
+        coeffs = {(power - 1): power * coeff for power, coeff in self}
         return Polynomial(coeffs)
 
     def __call__(self, x):
@@ -329,7 +327,7 @@ class Polynomial:
         return result
 
     def slow_eval(self, x):
-        result = sum((coeff * x**power for power, coeff in self.coeffs.items()))
+        result = sum((coeff * x**power for power, coeff in self))
         if isinstance(x, float):
             return float(x)
         if result.is_integer():
