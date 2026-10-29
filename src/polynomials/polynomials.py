@@ -317,4 +317,6 @@ class Polynomial:
         result = 0
         for power, coeff in self.coeffs.items():
             result += coeff * x ** power
+        if result.is_integer():
+            return int(result)
         return result
