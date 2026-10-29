@@ -62,7 +62,7 @@ def test_slice_decreases_degree(p, power):
 
 
 @given(polynomial())
-def test_additive_identity_element(a):
+def test_add_identity_element(a):
     add_zero_right = a + Polynomial.zero()
     add_zero_left = Polynomial.zero() + a
     assert a == add_zero_right
@@ -70,14 +70,14 @@ def test_additive_identity_element(a):
 
 
 @given(polynomial(), polynomial())
-def test_addition_is_commutative(a, b):
+def test_add_is_commutative(a, b):
     lhs = a + b
     rhs = b + a
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial(), polynomial())
-def test_addition_is_commutative(a, b, c):
+def test_add_is_commutative(a, b, c):
     lhs = (a + b) + c
     rhs = a + (b + c)
     assert lhs == rhs
@@ -89,19 +89,19 @@ def test_addition_is_commutative(a, b, c):
 
 
 @given(polynomial())
-def test_subtraction_identity_element(a):
+def test_sub_identity_element(a):
     rhs = a - Polynomial.zero()
     assert a == rhs
 
 
 @given(polynomial())
-def test_subtraction_of_self_is_zero(a):
+def test_sub_of_self_is_zero(a):
     rhs = a - a
     assert Polynomial.zero() == rhs
 
 
 @given(polynomial(), polynomial())
-def test_subtraction_is_anticommutative(a, b):
+def test_sub_is_anticommutative(a, b):
     lhs = a - b
     rhs = -(b - a)
     assert lhs == rhs
@@ -113,41 +113,41 @@ def test_subtraction_is_anticommutative(a, b):
 
 
 @given(polynomial())
-def test_multiplication_identity_element(a):
+def test_mult_identity_element(a):
     rhs = a * Polynomial.one()
     assert a == rhs
 
 
 @given(polynomial())
-def test_multiplication_absorbing_element(a):
+def test_mult_absorbing_element(a):
     zero = Polynomial.zero()
     rhs = a * zero
     assert zero == rhs
 
 
 @given(polynomial(), polynomial())
-def test_multiplication_is_commutative(a, b):
+def test_mult_is_commutative(a, b):
     lhs = a * b
     rhs = b * a
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial(), polynomial())
-def test_multiplication_is_associative(a, b, c):
+def test_mult_is_associative(a, b, c):
     lhs = (a * b) * c
     rhs = a * (b * c)
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial(), polynomial())
-def test_multiplication_distributes_over_addition(a, b, c):
+def test_mult_distributes_over_add(a, b, c):
     lhs = a * (b + c)
     rhs = a * b + a * c
     assert lhs == rhs
 
 
 @given(polynomial())
-def test_multiplication_by_minus_one_is_additive_inverse(a):
+def test_mult_by_minus_one_is_add_inverse(a):
     lhs = -Polynomial.one() * a
     rhs = -a
     assert lhs == rhs
@@ -175,21 +175,21 @@ def test_nonzero_polynomial_is_not_zero(a):
 
 
 @given(polynomial())
-def test_division_identity_element(a):
+def test_divmod_identity_element(a):
     lhs_quotient, lhs_remainder = divmod(a, Polynomial.one())
     assert lhs_quotient == a
     assert lhs_remainder == Polynomial.zero()
 
 
 @given(polynomial(), nonzero_polynomial())
-def test_division_is_inverse_of_multiplication(a, b):
+def test_divmod_is_inverse_of_mult(a, b):
     quotient, remainder = divmod(a, b)
     inverse = quotient * b + remainder
     assert a == inverse
 
 
 @given(nonzero_polynomial())
-def test_division_by_one_is_multiplicative_inverse(a):
+def test_divmod_by_one_is_mult_inverse(a):
     lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
     assert lhs_quotient * a + lhs_remainder == Polynomial.one()
 
@@ -200,7 +200,7 @@ def test_division_by_one_is_multiplicative_inverse(a):
 
 
 @given(nonzero_polynomial())
-def test_exponent_zero_rule(a):
+def test_exp_zero_rule(a):
     lhs = a**0
     assert lhs == Polynomial.one()
 
@@ -210,7 +210,7 @@ def test_exponent_zero_rule(a):
     st.integers(min_value=0, max_value=10),
     st.integers(min_value=0, max_value=10),
 )
-def test_exponent_product_rule(a, m, n):
+def test_exp_product_rule(a, m, n):
     lhs = a**m * a**n
     rhs = a ** (m + n)
     assert lhs == rhs
@@ -221,14 +221,14 @@ def test_exponent_product_rule(a, m, n):
     st.integers(min_value=0, max_value=4),
     st.integers(min_value=0, max_value=4),
 )
-def test_exponent_power_of_power_rule(a, m, n):
+def test_exp_power_of_power_rule(a, m, n):
     lhs = (a**m) ** n
     rhs = a ** (m * n)
     assert lhs == rhs
 
 
 @given(nonzero_polynomial(max_size=5), st.integers(min_value=0, max_value=10))
-def test_fast_slow_exponent(a, n):
+def test_fast_exp_equals_slow_exp(a, n):
     lhs = a**n
     rhs = a.slow_exp(n)
     assert lhs == rhs
@@ -240,7 +240,7 @@ def test_fast_slow_exponent(a, n):
 
 
 @given(nonzero_polynomial())
-def test_differentiation_lowers_polynomial_degree(a):
+def test_diff_lowers_polynomial_degree(a):
     a_diff = a.d()
     assert a.degree > a_diff.degree
 
@@ -252,35 +252,35 @@ def test_derivative_of_zero_is_zero():
 
 
 @given(constant_polynomial())
-def test_differentiation_constant_term_rule(a):
+def test_diff_constant_term_rule(a):
     lhs = a.d()
     rhs = Polynomial.zero()
     assert lhs == rhs
 
 
 @given(constant_polynomial(), polynomial())
-def test_differentiation_constant_factor_rule(a, b):
+def test_diff_constant_factor_rule(a, b):
     lhs = (a * b).d()
     rhs = a * b.d()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
-def test_differentiation_sum_rule(a, b):
+def test_diff_sum_rule(a, b):
     lhs = (a + b).d()
     rhs = a.d() + b.d()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
-def test_differentiation_difference_rule(a, b):
+def test_diff_difference_rule(a, b):
     lhs = (a - b).d()
     rhs = a.d() - b.d()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
-def test_differentiation_product_rule(a, b):
+def test_diff_product_rule(a, b):
     lhs = (a * b).d()
     rhs = a.d() * b + a * b.d()
     assert lhs == rhs
@@ -292,14 +292,14 @@ def test_differentiation_product_rule(a, b):
 
 
 @given(nonzero_polynomial())
-def test_evaluate_zero_is_constant(p):
+def test_eval_zero_is_constant(p):
     lhs = p(0)
     rhs = p[0]
     assert lhs == rhs
 
 
 @given(nonzero_polynomial())
-def test_evaluate_one_is_sum_of_coefficients(p):
+def test_eval_one_is_sum_of_coefficients(p):
     lhs = p(1)
     rhs = sum(p.coeffs.values())
     assert lhs == rhs
