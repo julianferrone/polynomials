@@ -31,6 +31,28 @@ def test_zero():
     assert lhs == rhs
 
 
+# ============================
+# Array Access on Coefficients
+# ============================
+
+
+@given(st.integers(min_value=0))
+def test_get_any_coeff_of_zero_is_zero(power):
+    coeff = Polynomial.zero()[power]
+    assert coeff == 0
+
+@given(st.integers(min_value=0), st.fractions())
+def test_set_then_get_is_get(power, coeff):
+    p = Polynomial.zero()
+    p[power] = coeff
+    assert p[power] == coeff
+
+@given(polynomial(), st.integers(min_value=0))
+def test_slice_decreases_degree(p, power):
+    sliced = p.slice(0, power)
+    assert sliced.degree <= p.degree
+    assert sliced.degree <= power
+
 # ========
 # Addition
 # ========
