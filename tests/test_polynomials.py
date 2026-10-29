@@ -8,12 +8,12 @@ import pytest
 # =====================
 
 
-def polynomial():
-    return st.builds(Polynomial.from_coeffs, st.lists(st.fractions()))
+def polynomial(**kwargs):
+    return st.builds(Polynomial.from_coeffs, st.lists(st.fractions(), **kwargs))
 
 
-def nonzero_polynomial():
-    return polynomial().filter(lambda p: p != Polynomial.zero())
+def nonzero_polynomial(**kwargs):
+    return polynomial(**kwargs).filter(lambda p: p != Polynomial.zero())
 
 
 def constant_polynomial():
@@ -192,6 +192,46 @@ def test_division_is_inverse_of_multiplication(a, b):
 def test_division_by_one_is_multiplicative_inverse(a):
     lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
     assert lhs_quotient * a + lhs_remainder == Polynomial.one()
+
+
+# ==============
+# Exponentiation
+# ==============
+
+
+@given(nonzero_polynomial())
+def test_exponent_zero_rule(a):
+    lhs = a**0
+    assert lhs == Polynomial.one()
+
+
+@given(
+    nonzero_polynomial(max_size=5),
+    st.integers(min_value=0, max_value=10),
+    st.integers(min_value=0, max_value=10),
+)
+def test_exponent_product_rule(a, m, n):
+    lhs = a**m * a**n
+    rhs = a ** (m + n)
+    assert lhs == rhs
+
+
+@given(
+    nonzero_polynomial(max_size=5),
+    st.integers(min_value=0, max_value=5),
+    st.integers(min_value=0, max_value=5),
+)
+def test_exponent_power_of_power_rule(a, m, n):
+    lhs = (a**m) ** n
+    rhs = a ** (m * n)
+    assert lhs == rhs
+
+
+@given(nonzero_polynomial(max_size=5), st.integers(min_value=0, max_value=10))
+def test_fast_slow_exponent(a, n):
+    lhs = a**n
+    rhs = a.slow_exp(n)
+    assert lhs == rhs
 
 
 # ===============
