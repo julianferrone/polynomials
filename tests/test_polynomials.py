@@ -77,7 +77,7 @@ def test_add_is_commutative(a, b):
 
 
 @given(polynomial(), polynomial(), polynomial())
-def test_add_is_commutative(a, b, c):
+def test_add_is_associative(a, b, c):
     lhs = (a + b) + c
     rhs = a + (b + c)
     assert lhs == rhs
