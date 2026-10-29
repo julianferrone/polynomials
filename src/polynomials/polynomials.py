@@ -311,12 +311,24 @@ class Polynomial:
         return Polynomial(coeffs)
 
     def __call__(self, x):
-        return self.eval(x)
+        return self.fast_eval(x)
 
-    def eval(self, x):
-        result = 0
-        for power, coeff in self.coeffs.items():
-            result += coeff * x ** power
+    def fast_eval(self, x):
+        # Implements the Horner's rule for evaluating a polynomial
+        result = self[self.degree]
+        for power in range(self.degree - 1, -1, -1):
+            result *= x
+            result += self[power]
+        if isinstance(x, float):
+            return float(x)
+        if result.is_integer():
+            return int(result)
+        return result
+
+    def slow_eval(self, x):
+        result = sum((coeff * x ** power for power, coeff in self.coeffs.items()))
+        if isinstance(x, float):
+            return float(x)
         if result.is_integer():
             return int(result)
         return result
