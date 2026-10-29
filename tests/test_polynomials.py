@@ -319,3 +319,19 @@ def test_slow_eval_equals_fast_eval(p, x):
     lhs = p.fast_eval(x)
     rhs = p.slow_eval(x)
     assert lhs == rhs
+
+
+# ===========
+# Composition
+# ===========
+
+
+@given(
+    polynomial(max_size=5),
+    polynomial(max_size=5),
+    polynomial(max_size=5),
+)
+def test_comp_is_associative(p, q, r):
+    lhs = (p << q) << r
+    rhs = p << (q << r)
+    assert lhs == rhs
