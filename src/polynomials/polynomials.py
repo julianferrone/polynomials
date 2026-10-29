@@ -365,17 +365,8 @@ class Polynomial:
 
                 m = ceil(n / 2)
 
-                # An interesting API addition could be to combine these calls
-                # into a new primitive. Something like:
-                #
-                # p1, p2 = p.split_at(m)
-                # q1, q2 = q.split_at(m)
-
-                p_lower = p.slice(0, m)
-                q_lower = q.slice(0, m)
-
-                p_upper = p.slice(m, n + 1).factor_out(m)
-                q_upper = q.slice(m, n + 1).factor_out(m)
+                p_lower, p_upper = p.split(m)
+                q_lower, q_upper = q.split(m)
 
                 p_prime = p_lower + p_upper
                 q_prime = q_lower + q_upper
