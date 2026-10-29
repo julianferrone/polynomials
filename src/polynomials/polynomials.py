@@ -145,10 +145,20 @@ class Polynomial:
         yield from self.coeffs.items()
 
     def split(self, split_at: int) -> tuple[Polynomial, Polynomial]:
-        """Splits a polynomial into two terms a0 + a1*x^power.
+        """Splits a polynomial into lower and higher-degree parts.
+
+        Partition the terms at the given exponent, returning two polynomials
+        such that `self == lower + upper * x**split_at`. The lower polynomial
+        contains terms with exponents less than `split_at`. The upper
+        polynomial contains terms with exponents greater than or equal to
+        `split_at`, with their exponents shifted down by `split_at`.
 
         Arguments:
-            power (int): The bound on exponents
+            split_at (int): The exponent at which to split the polynomial.
+
+        Returns:
+            tuple[Polynomial, Polynomial]: The lower- and upper-degree parts
+            of the polynomial.
         """
         lower = Polynomial.zero()
         upper = Polynomial.zero()
