@@ -2,6 +2,7 @@ from __future__ import annotations
 from collections import defaultdict
 from copy import deepcopy
 from fractions import Fraction
+from math import ceil
 
 
 class Polynomial:
@@ -128,11 +129,89 @@ class Polynomial:
         return self + -other
 
     def __mul__(self, other):
+        return self.fast_mul(other)
+
+    def fast_mul(self, other):
+        # Implements Karatsuba's multiplication on polynomials
+        tasks = []
+        values = []
+        tasks.append(("mul", self, other))
+        while tasks:
+            task = tasks.pop()
+            tag = task[0]
+            if tag == "mul":
+                p, q = task[1], task[2]
+                # Early exit on 0
+                if p.is_zero or q.is_zero:
+                    values.append(Polynomial.zero())
+                    continue
+                # Early exit on 1
+                if p == Polynomial.one():
+                    values.append(q)
+                    continue
+                if q == Polynomial.one():
+                    values.append(p)
+                    continue
+                # Early exit on -1
+                if p == -Polynomial.one():
+                    values.append(-q)
+                    continue
+                if q == -Polynomial.one():
+                    values.append(-p)
+                    continue
+
+                n = max(p.degree, q.degree)
+                if n <= 1:
+                    product = p.slow_mul(q)
+                    values.append(product)
+                    continue
+
+                m = ceil(n / 2)
+
+                p_lower = p.slice(0, m)
+                q_lower = q.slice(0, m)
+
+                p_upper = p.slice(m, n + 1).factor_out(m)
+                q_upper = q.slice(m, n + 1).factor_out(m)
+
+                p_prime = p_lower + p_upper
+                q_prime = q_lower + q_upper
+
+                r1 = ("mul", p_lower, q_lower)
+                r2 = ("mul", p_upper, q_upper)
+                r3 = ("mul", p_prime, q_prime)
+
+                tasks.append(("combine", m, n))
+                tasks.append(r1)
+                tasks.append(r2)
+                tasks.append(r3)
+
+            elif tag == "combine":
+                m, n = task[1], task[2]
+                r1 = values.pop()
+                r2 = values.pop()
+                r3 = values.pop()
+                r4 = r3 - r1 - r2
+
+                r = Polynomial.zero()
+                for i in range(2 * n + 1):
+                    r[i] = r1[i] + r4[i - m] + r2[i - 2 * m]
+                values.append(r)
+        return values.pop()
+
+    def slow_mul(self, other):
+        # n^2 multiplication
         coeffs = defaultdict(Fraction)
         for power_a, coeff_a in self.coeffs.items():
             for power_b, coeff_b in other.coeffs.items():
                 coeffs[power_a + power_b] += coeff_a * coeff_b
         return Polynomial(coeffs)
+
+    def factor_out(self, n: int) -> Polynomial:
+        p = Polynomial.zero()
+        for power, coeff in self.coeffs.items():
+            p[power - n] = coeff
+        return p
 
     def __divmod__(self, other):
         if other.is_zero:
