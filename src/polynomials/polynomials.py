@@ -67,6 +67,33 @@ class Polynomial:
     # Printing to String
     # ------------------
 
+    def __str__(self):
+        def term(power, coeff):
+            if power == 0:
+                return str(coeff)
+            else:
+                coeff = "" if coeff == 1 else str(coeff)
+                power = "" if power == 1 else f"^{power}"
+                return f"{coeff}x{power}"
+        
+        parts = iter(sorted(self.coeffs.items(), reverse=True))
+
+        # As we filter out powers with zero coefficients when constructing a
+        # Polynomial, a zero Polynomial will have an empty Counter and so
+        # next() will fail with a StopIteration
+        try:
+            power, coeff = next(parts)
+        except StopIteration:
+            return "0"
+
+        s = "" if coeff >= 0 else "-"
+        s += term(power, abs(coeff))
+        for power, coeff in parts:
+            sign = " + " if coeff >= 0 else " - "
+            s += sign
+            s += term(power, abs(coeff))
+        return s
+
     def __repr__(self):
         return f"Polynomial({self.coeffs!r})"
 
