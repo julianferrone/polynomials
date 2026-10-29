@@ -239,6 +239,9 @@ class Polynomial:
                 coeffs[power_a + power_b] += coeff_a * coeff_b
         return Polynomial(coeffs)
 
+    def scale(self, x) -> Polynomial:
+        return Polynomial((power: coeff * n for power, coeff in self))
+
     def factor_out(self, n: int) -> Polynomial:
         p = Polynomial.zero()
         for power, coeff in self:
