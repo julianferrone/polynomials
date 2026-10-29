@@ -582,7 +582,7 @@ class Polynomial:
     # Function Operations
     # ...................
 
-    def d(self) -> Polynomial:
+    def diff(self) -> Polynomial:
         """Return the derivative of the polynomial.
 
         Returns:
@@ -593,9 +593,9 @@ class Polynomial:
         >>> p = Polynomial(4, 3, 2, 1)
         >>> str(p)
         '4x^3 + 3x^2 + 2x + 1'
-        >>> str(p.d())
+        >>> str(p.diff())
         '12x^2 + 6x + 2'
-        >>> str(p.d().d())
+        >>> str(p.diff().diff())
         '24x + 6'
         """
         return Polynomial({(power - 1): power * coeff for power, coeff in self})

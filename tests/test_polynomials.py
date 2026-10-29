@@ -246,48 +246,48 @@ def test_fast_exp_equals_slow_exp(a, n):
 
 @given(nonzero_polynomial())
 def test_diff_lowers_polynomial_degree(a):
-    a_diff = a.d()
+    a_diff = a.diff()
     assert a.degree > a_diff.degree
 
 
 def test_derivative_of_zero_is_zero():
     lhs = Polynomial.zero()
-    rhs = lhs.d()
+    rhs = lhs.diff()
     assert lhs == rhs
 
 
 @given(constant_polynomial())
 def test_diff_constant_term_rule(a):
-    lhs = a.d()
+    lhs = a.diff()
     rhs = Polynomial.zero()
     assert lhs == rhs
 
 
 @given(constant_polynomial(), polynomial())
 def test_diff_constant_factor_rule(a, b):
-    lhs = (a * b).d()
-    rhs = a * b.d()
+    lhs = (a * b).diff()
+    rhs = a * b.diff()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
 def test_diff_sum_rule(a, b):
-    lhs = (a + b).d()
-    rhs = a.d() + b.d()
+    lhs = (a + b).diff()
+    rhs = a.diff() + b.diff()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
 def test_diff_difference_rule(a, b):
-    lhs = (a - b).d()
-    rhs = a.d() - b.d()
+    lhs = (a - b).diff()
+    rhs = a.diff() - b.diff()
     assert lhs == rhs
 
 
 @given(polynomial(), polynomial())
 def test_diff_product_rule(a, b):
-    lhs = (a * b).d()
-    rhs = a.d() * b + a * b.d()
+    lhs = (a * b).diff()
+    rhs = a.diff() * b + a * b.diff()
     assert lhs == rhs
 
 
