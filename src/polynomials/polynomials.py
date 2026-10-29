@@ -326,7 +326,7 @@ class Polynomial:
         return result
 
     def slow_eval(self, x):
-        result = sum((coeff * x ** power for power, coeff in self.coeffs.items()))
+        result = sum((coeff * x**power for power, coeff in self.coeffs.items()))
         if isinstance(x, float):
             return float(x)
         if result.is_integer():
