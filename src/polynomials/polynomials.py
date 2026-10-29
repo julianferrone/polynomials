@@ -440,6 +440,22 @@ class Polynomial:
 
         Raises:
             ValueError: if `other` is the zero polynomial.
+
+        Examples:
+
+        >>> p = Polynomial.from_coeffs(3, 2, 6)
+        >>> str(p)
+        '3x^2 + 2x + 6'
+        >>> q = Polynomial.from_coeffs(4, 1)
+        >>> str(q)
+        '4x + 1'
+        >>> (quotient, remainder) = divmod(p, q)
+        >>> str(quotient)
+        '3/4x + 5/16'
+        >>> str(remainder)
+        '91/16'
+        >>> str(quotient * q + remainder)
+        '3x^2 + 2x + 6'
         """
         if other.is_zero:
             raise ValueError("Can't divide by zero Polynomial")
@@ -473,6 +489,16 @@ class Polynomial:
         Raises:
             ValueError: if n is not an integer, a negative integer, or if both
             the polynomial and n are zero.
+
+        Examples:
+
+        >>> p = Polynomial.from_coeffs(1, 1)
+        >>> str(p)
+        'x + 1'
+        >>> str(p**2)
+        'x^2 + 2x + 1'
+        >>> str(p**3)
+        'x^3 + 3x^2 + 3x + 1'
         """
         return self.fast_exp(n)
 
@@ -546,7 +572,21 @@ class Polynomial:
     # ...................
 
     def d(self) -> Polynomial:
-        """Return the derivative of the polynomial."""
+        """Return the derivative of the polynomial.
+
+        Returns:
+            Polynomial: the derivative polynomial.
+
+        Examples:
+
+        >>> p = Polynomial.from_coeffs(4, 3, 2, 1)
+        >>> str(p)
+        '4x^3 + 3x^2 + 2x + 1'
+        >>> str(p.d())
+        '12x^2 + 6x + 2'
+        >>> str(p.d().d())
+        '24x + 6'
+        """
         return Polynomial({(power - 1): power * coeff for power, coeff in self})
 
     def __call__(self, x: int | float | Fraction) -> int | float | Fraction:
@@ -558,6 +598,18 @@ class Polynomial:
 
         Returns:
             int | float | Fraction: the computed value.
+
+        Examples:
+
+        >>> p = Polynomial.from_coeffs(3, -2, 1)
+        >>> str(p)
+        '3x^2 - 2x + 1'
+        >>> p(0)
+        1
+        >>> p(1)
+        2
+        >>> p(2)
+        9
         """
         return self.fast_eval(x)
 
@@ -610,6 +662,15 @@ class Polynomial:
         Returns:
             Polynomial: The composed polynomial which evaluates x as
             self(other(x)).
+
+        Examples:
+
+        >>> p = Polynomial.from_coeffs(2, 1)
+        >>> q = Polynomial.from_coeffs(3, 0, 0)
+        >>> str(p << q)
+        '6x^2 + 1'
+        >>> str(q << p)
+        '12x^2 + 12x + 3'
         """
         return self.compose(other)
 
