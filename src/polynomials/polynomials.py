@@ -144,6 +144,21 @@ class Polynomial:
         """
         yield from self.coeffs.items()
 
+    def split(self, split_at: int) -> tuple[Polynomial, Polynomial]:
+        """Splits a polynomial into two terms a0 + a1*x^power.
+
+        Arguments:
+            power (int): The bound on exponents
+        """
+        lower = Polynomial.zero()
+        upper = Polynomial.zero()
+        for power, coeff in self:
+            if power < split_at:
+                lower[power] = coeff
+            else:
+                upper[power - split_at] = coeff
+        return (lower, upper)
+
     def slice(self, start: int, end: int) -> Polynomial:
         """
         Returns a polynomial containing terms with exponents in the range
