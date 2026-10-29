@@ -42,9 +42,9 @@ class Polynomial:
     def one(cls) -> Polynomial:
         return cls.from_coeffs(1)
 
-    # -------------------
-    # Getting and Setting
-    # -------------------
+    # ------------------
+    # Coefficient Access
+    # ------------------
 
     def __getitem__(self, power):
         return self.coeffs.get(power, 0)
