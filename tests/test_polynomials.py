@@ -335,3 +335,18 @@ def test_comp_is_associative(p, q, r):
     lhs = (p << q) << r
     rhs = p << (q << r)
     assert lhs == rhs
+
+
+@given(
+    polynomial(max_size=5),
+    polynomial(max_size=5),
+    st.one_of(
+        st.integers(min_value=-1_000_000, max_value=1_000_000),
+        st.fractions(min_value=-1_000_000, max_value=1_000_000),
+        st.floats(min_value=-1_000_000, max_value=1_000_000),
+    ),
+)
+def test_comp_respects_eval(p, q, x):
+    lhs = (p << q)(x)
+    rhs = p(q(x))
+    assert lhs == rhs

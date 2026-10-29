@@ -13,6 +13,20 @@ class Polynomial:
     # ------------
 
     def __init__(self, coeffs: dict[int, int | Fraction]) -> Polynomial:
+        """
+        Initialises a Polynomial from a mapping of powers to coefficients.
+
+        Args:
+            coeffs (dict[int, int | Fraction]): The mapping of integer powers
+            to integer or Fraction coefficients.
+
+        Returns:
+            Polynomial: A polynomial with Fraction coefficients.
+
+        Example:
+        >>> str(Polynomial({0: 3, 1: 2, 2: 1}))
+        'x^2 + 2x + 3'
+        """
         self.coeffs = defaultdict(
             Fraction,
             {
