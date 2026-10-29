@@ -72,7 +72,7 @@ class Polynomial:
         Returns:
             Polynomial: The polynomial with no non-zero coefficients.
         """
-        return cls.from_coeffs(0)
+        return cls(0)
 
     @classmethod
     def one(cls) -> Polynomial:
@@ -82,7 +82,7 @@ class Polynomial:
         Returns:
             Polynomial: The polynomial 1.
         """
-        return cls.from_coeffs(1)
+        return cls(1)
 
     # ------------------
     # Coefficient Access
@@ -454,10 +454,10 @@ class Polynomial:
 
         Examples:
 
-        >>> p = Polynomial.from_coeffs(3, 2, 6)
+        >>> p = Polynomial(3, 2, 6)
         >>> str(p)
         '3x^2 + 2x + 6'
-        >>> q = Polynomial.from_coeffs(4, 1)
+        >>> q = Polynomial(4, 1)
         >>> str(q)
         '4x + 1'
         >>> (quotient, remainder) = divmod(p, q)
@@ -503,7 +503,7 @@ class Polynomial:
 
         Examples:
 
-        >>> p = Polynomial.from_coeffs(1, 1)
+        >>> p = Polynomial(1, 1)
         >>> str(p)
         'x + 1'
         >>> str(p**2)
@@ -590,7 +590,7 @@ class Polynomial:
 
         Examples:
 
-        >>> p = Polynomial.from_coeffs(4, 3, 2, 1)
+        >>> p = Polynomial(4, 3, 2, 1)
         >>> str(p)
         '4x^3 + 3x^2 + 2x + 1'
         >>> str(p.d())
@@ -612,7 +612,7 @@ class Polynomial:
 
         Examples:
 
-        >>> p = Polynomial.from_coeffs(3, -2, 1)
+        >>> p = Polynomial(3, -2, 1)
         >>> str(p)
         '3x^2 - 2x + 1'
         >>> p(0)
@@ -676,8 +676,8 @@ class Polynomial:
 
         Examples:
 
-        >>> p = Polynomial.from_coeffs(2, 1)
-        >>> q = Polynomial.from_coeffs(3, 0, 0)
+        >>> p = Polynomial(2, 1)
+        >>> q = Polynomial(3, 0, 0)
         >>> str(p)
         '2x + 1'
         >>> str(q)
@@ -704,8 +704,8 @@ class Polynomial:
         # multiplication and addition on polynomials instead of fractional
         # coefficients. This lets us efficiently substitute the `other`
         # polynomial in for the variables in `self`.
-        result = Polynomial.from_coeffs(self[self.degree])
+        result = Polynomial(self[self.degree])
         for power in range(self.degree - 1, -1, -1):
             result *= other
-            result += Polynomial.from_coeffs(self[power])
+            result += Polynomial(self[power])
         return result
