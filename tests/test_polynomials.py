@@ -284,3 +284,19 @@ def test_differentiation_product_rule(a, b):
     lhs = (a * b).d()
     rhs = a.d() * b + a * b.d()
     assert lhs == rhs
+
+# ==========
+# Evaluation
+# ==========
+
+@given(nonzero_polynomial())
+def test_evaluate_zero_is_constant(p):
+    lhs = p(0)
+    rhs = p[0]
+    assert lhs == rhs
+
+@given(nonzero_polynomial())
+def test_evaluate_one_is_sum_of_coefficients(p):
+    lhs = p(1)
+    rhs = sum(p.coeffs.values())
+    assert lhs == rhs
