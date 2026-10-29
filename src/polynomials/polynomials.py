@@ -477,6 +477,8 @@ class Polynomial:
         return self.fast_exp(n)
 
     def fast_exp(self, n):
+        if not isinstance(n, int):
+            raise ValueError("Can't exponentiate by non-integer")
         if n < 0:
             raise ValueError("Can't exponentiate by negative integer")
         if self.is_zero and n == 0:
@@ -498,6 +500,8 @@ class Polynomial:
         return p
 
     def slow_exp(self, n):
+        if not isinstance(n, int):
+            raise ValueError("Can't exponentiate by non-integer")
         if n < 0:
             raise ValueError("Can't exponentiate by negative integer")
         if self.is_zero and n == 0:
