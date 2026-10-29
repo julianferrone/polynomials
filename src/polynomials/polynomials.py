@@ -477,6 +477,19 @@ class Polynomial:
         return self.fast_exp(n)
 
     def fast_exp(self, n: int) -> Polynomial:
+        """Raise the polynomial to a non-negative integer power using
+        exponentiation by squaring.
+
+        Args:
+            n (int): The exponent. Must be a non-negative integer.
+
+        Returns:
+            Polynomial: The polynomial raised to the power n.
+
+        Raises:
+            ValueError: if n is not an integer, a negative integer, or if both
+            the polynomial and n are zero.
+        """
         if not isinstance(n, int):
             raise ValueError("Can't exponentiate by non-integer")
         if n < 0:
@@ -500,6 +513,19 @@ class Polynomial:
         return p
 
     def slow_exp(self, n: int) -> Polynomial:
+        """Raise the polynomial to a non-negative integer power using
+        naive exponentiation.
+
+        Args:
+            n (int): The exponent. Must be a non-negative integer.
+
+        Returns:
+            Polynomial: The polynomial raised to the power n.
+
+        Raises:
+            ValueError: if n is not an integer, a negative integer, or if both
+            the polynomial and n are zero.
+        """
         if not isinstance(n, int):
             raise ValueError("Can't exponentiate by non-integer")
         if n < 0:
