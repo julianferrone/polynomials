@@ -41,6 +41,27 @@ class Polynomial:
     def one(cls) -> Polynomial:
         return cls.from_coeffs(1)
 
+    # -------------------
+    # Getting and Setting
+    # -------------------
+
+    def __getitem__(self, power):
+        return self.coeffs.get(power, 0)
+
+    def __setitem__(self, power, coeff):
+        if coeff == 0 or 0 > power:
+            pass
+        else:
+            self.coeffs[power] = coeff
+
+    def slice(self, start, end):
+        coeffs = {
+            power: coeff
+            for power, coeff in self.coeffs.items()
+            if start <= power and power < end
+        }
+        return Polynomial(coeffs)
+
     # ------------------
     # Printing to String
     # ------------------
