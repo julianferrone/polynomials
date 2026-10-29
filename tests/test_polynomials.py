@@ -285,9 +285,11 @@ def test_differentiation_product_rule(a, b):
     rhs = a.d() * b + a * b.d()
     assert lhs == rhs
 
+
 # ==========
 # Evaluation
 # ==========
+
 
 @given(nonzero_polynomial())
 def test_evaluate_zero_is_constant(p):
@@ -295,8 +297,25 @@ def test_evaluate_zero_is_constant(p):
     rhs = p[0]
     assert lhs == rhs
 
+
 @given(nonzero_polynomial())
 def test_evaluate_one_is_sum_of_coefficients(p):
     lhs = p(1)
     rhs = sum(p.coeffs.values())
+    assert lhs == rhs
+
+
+@given(
+    polynomial(),
+    # We have to set a limit on the maximum value we evaluate on
+    # so we don't have numeric overflows in the test.
+    st.one_of(
+        st.integers(min_value=-1_000_000, max_value=1_000_000),
+        st.fractions(min_value=-1_000_000, max_value=1_000_000),
+        st.floats(min_value=-1_000_000, max_value=1_000_000),
+    ),
+)
+def test_slow_eval_equals_fast_eval(p, x):
+    lhs = p.fast_eval(x)
+    rhs = p.slow_eval(x)
     assert lhs == rhs
