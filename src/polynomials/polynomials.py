@@ -683,6 +683,10 @@ class Polynomial:
 
         >>> p = Polynomial.from_coeffs(2, 1)
         >>> q = Polynomial.from_coeffs(3, 0, 0)
+        >>> str(p)
+        '2x + 1'
+        >>> str(q)
+        '3x^2'
         >>> str(p << q)
         '6x^2 + 1'
         >>> str(q << p)
