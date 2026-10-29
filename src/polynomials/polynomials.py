@@ -55,6 +55,12 @@ class Polynomial:
         else:
             self.coeffs[power] = coeff
 
+    def __delitem__(self, power):
+        # `del self.coeffs[power]` would fail with a KeyError if the power isn't
+        # found. We want deletion to be an idempotent operation, so we `pop` and
+        # don't return the coefficient.
+        self.coeffs.pop(power, None)
+
     def __iter__(self):
         yield from self.coeffs.items()
 
