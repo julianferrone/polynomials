@@ -332,3 +332,14 @@ class Polynomial:
         if result.is_integer():
             return int(result)
         return result
+
+    def __lshift__(self, other):
+        return self.compose(other)
+
+    def compose(self, other):
+        # Implements the Horner's rule for evaluating a polynomial
+        result = Polynomial.from_coeffs(self[self.degree])
+        for power in range(self.degree - 1, -1, -1):
+            result *= other
+            result += Polynomial.from_coeffs(self[power])
+        return result
