@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections import defaultdict
+from collections.abc import Iterable
 from copy import deepcopy
 from fractions import Fraction
 from math import ceil
@@ -38,6 +39,26 @@ class Polynomial:
 
     @classmethod
     def from_coeffs(cls, *args) -> Polynomial:
+        """
+        Initialises a Polynomial from a standard-form list of coefficients
+        (i.e. in descending order by exponent).
+
+        Args:
+            *args: Coefficients in descending order of power, either as
+            positional arguments or as a single list or tuple.
+
+        Returns:
+            Polynomial: The polynomial represented by the given coefficients.
+
+        Example:
+
+        >>> str(Polynomial.from_coeffs(1, 2, 3))
+        'x^2 + 2x + 3'
+        >>> str(Polynomial.from_coeffs(-3, 0))
+        '-3x'
+        >>> str(Polynomial.from_coeffs(4, 0, 0, -1))
+        '4x^3 - 1'
+        """
         if len(args) == 1 and isinstance(args[0], (list, tuple)):
             args = args[0]
         # We need to iterate in reverse order so that users can
@@ -50,20 +71,49 @@ class Polynomial:
 
     @classmethod
     def zero(cls) -> Polynomial:
+        """
+        Creates the constant 0 polynomial.
+
+        Returns:
+            Polynomial: The polynomial with no non-zero coefficients.
+        """
         return cls.from_coeffs(0)
 
     @classmethod
     def one(cls) -> Polynomial:
+        """
+        Creates the constant 1 polynomial.
+
+        Returns:
+            Polynomial: The polynomial 1.
+        """
         return cls.from_coeffs(1)
 
     # ------------------
     # Coefficient Access
     # ------------------
 
-    def __getitem__(self, power):
-        return self.coeffs.get(power, 0)
+    def __getitem__(self, power: int) -> Fraction:
+        """
+        Returns the coefficient at a given exponent.
 
-    def __setitem__(self, power, coeff):
+        Arguments:
+            power (int): The exponent.
+
+        Returns:
+            Fraction: The coefficient for the given exponent. Returns 0 if
+                there is no coefficient.
+        """
+        return self.coeffs.get(power, Fraction(0))
+
+    def __setitem__(self, power: int, coeff: Fraction):
+        """
+        Sets the coefficient for a given exponent.
+
+        Arguments:
+            power (int): The exponent.
+            coeff (Fraction): The coefficient to set.
+        """
         if 0 > power:
             pass
         elif coeff == 0:
@@ -71,16 +121,42 @@ class Polynomial:
         else:
             self.coeffs[power] = coeff
 
-    def __delitem__(self, power):
+    def __delitem__(self, power: int):
+        """
+        Deletes the coefficient for a given exponent.
+
+        Arguments:
+            power (int): The exponent.
+        """
         # `del self.coeffs[power]` would fail with a KeyError if the power isn't
         # found. We want deletion to be an idempotent operation, so we `pop` and
         # don't return the coefficient.
         self.coeffs.pop(power, None)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[tuple[int, Fraction]]:
+        """
+        Returns an iterator of the individual terms in the polynomial.
+
+        Returns:
+            Iterator[tuple[int, Fraction]]: An iterator of the terms in the
+            polynomial. Each term is a tuple of an exponent (int) and its
+            associated coefficient (Fraction).
+        """
         yield from self.coeffs.items()
 
-    def slice(self, start, end):
+    def slice(self, start: int, end: int) -> Polynomial:
+        """
+        Returns a polynomial containing terms with exponents in the range
+        [start, end).
+
+        Arguments:
+            start (int): The lower bound on exponents (inclusive).
+            end (int): The upper bound on exponents (exclusive).
+
+        Returns:
+            Polynomial: A new polynomial containing only terms whose exponents
+            satisfy *start <= power < end*.
+        """
         coeffs = {
             power: coeff for power, coeff in self if start <= power and power < end
         }
@@ -90,7 +166,9 @@ class Polynomial:
     # Printing to String
     # ------------------
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Human-readable string representation of a Polynomial."""
+
         def term(power, coeff):
             if power == 0:
                 return str(coeff)
@@ -126,10 +204,18 @@ class Polynomial:
 
     @property
     def is_zero(self) -> bool:
+        """Whether the polynomial is the zero polynomial."""
         return False if self.coeffs else True
 
     @property
     def degree(self) -> int:
+        """Returns the degree of the polynomial. As Polynomials are univariate,
+        this is the highest exponent occurring in the polynomial.
+
+        Returns:
+            int: The degree of the polynomial. *-1* if the polynomial is the
+            zero polynomial.
+        """
         # Convention for empty polynomials is that they have a degree of
         # negative infinity, but this would require returning a float.
         if self.is_zero:
@@ -137,8 +223,15 @@ class Polynomial:
         return max(self.coeffs.keys())
 
     @property
-    def leading_term(self) -> (int, int):
-        return max(self, default=(0, 0), key=lambda pair: pair[0])
+    def leading_term(self) -> tuple[int, Fraction]:
+        """Returns the term with the highest exponent in the polynomial.
+
+        Returns:
+            tuple[int, Fraction]: The term with the highest exponent in the
+            polynomial. The term consists of the expoonent (int) and its
+            associated coefficient (Fraction).
+        """
+        return max(self, default=(0, Fraction(0)), key=lambda pair: pair[0])
 
     # --------------------
     # Algebraic Operations
@@ -148,10 +241,19 @@ class Polynomial:
     # Arithmetic Operations
     # .....................
 
-    def __eq__(self, other):
+    def __eq__(self, other: Polynomial) -> bool:
+        """Compares two polynomials by their coefficients."""
         return self.coeffs == other.coeffs
 
-    def __add__(self, other):
+    def __add__(self, other: Polynomial) -> Polynomial:
+        """Add two polynomials together.
+
+        Args:
+            other (Polynomial): the second summand polynomial.
+
+        Returns:
+            Polynomial: the sum of the two polynomials.
+        """
         # Note: it would be great to just implement this with something like
         # a Counter, and then add them together:
         # `coeffs = self.coeffs + power.coeffs`
@@ -172,19 +274,50 @@ class Polynomial:
         return p
 
     def __neg__(self):
+        """Return a new polynomial with every coefficient negated."""
         return Polynomial({power: -coeff for power, coeff in self})
 
     def __sub__(self, other):
+        """Subtract one polynomial from another.
+
+        Args:
+            other (Polynomial): the term to subtract.
+
+        Returns:
+            Polynomial: the difference of the two polynomials.
+        """
         return self + -other
 
     def __mul__(self, other):
+        """Multiply two polynomials together.
+
+        Args:
+            other (Polynomial): the second factor.
+
+        Returns:
+            Polynomial: the product of the two polynomials.
+        """
         return self.fast_mul(other)
 
     def fast_mul(self, other):
-        # Implements Karatsuba's multiplication on polynomials
+        """Multiply two polynomials together. Implements Karatsuba's
+        multiplication algorithm on polynomials.
+
+        Args:
+            other (Polynomial): the second factor.
+
+        Returns:
+            Polynomial: the product of the two polynomials.
+        """
         tasks = []
         values = []
         tasks.append(("mul", self, other))
+        # Morally, I'd like to implement Karatsuba with a recursive solution,
+        # but Python will fail with a stack overflow exception on
+        # decently-sized polynomials. So I need to manually track tasks (which
+        # stores information about divide-and-conquer multiplications that need
+        # to be recursed into, as well as when to combine these) and values
+        # (executed multiplications).
         while tasks:
             task = tasks.pop()
             tag = task[0]
@@ -216,6 +349,12 @@ class Polynomial:
                     continue
 
                 m = ceil(n / 2)
+
+                # An interesting API addition could be to combine these calls
+                # into a new primitive. Something like:
+                #
+                # p1, p2 = p.split_at(m)
+                # q1, q2 = q.split_at(m)
 
                 p_lower = p.slice(0, m)
                 q_lower = q.slice(0, m)
@@ -249,6 +388,15 @@ class Polynomial:
         return values.pop()
 
     def slow_mul(self, other):
+        """Multiply two polynomials together. Implements naive multiplication
+        on polynomials.
+
+        Args:
+            other (Polynomial): the second factor.
+
+        Returns:
+            Polynomial: the product of the two polynomials.
+        """
         # n^2 multiplication
         p = Polynomial.zero()
         for power_a, coeff_a in self:
@@ -256,19 +404,50 @@ class Polynomial:
                 p[power_a + power_b] += coeff_a * coeff_b
         return p
 
-    def scale(self, x) -> Polynomial:
-        return Polynomial({power: coeff * n for power, coeff in self})
+    def scale(self, factor: int | Fraction) -> Polynomial:
+        """Returns a new polynomial with all coefficients scaled by the given
+        factor.
+
+        Args:
+            factor (int | Fraction): The scaling factor.
+
+        Returns:
+            Polynomial: the scaled polynomial.
+        """
+        return Polynomial({power: coeff * factor for power, coeff in self})
 
     def factor_out(self, n: int) -> Polynomial:
+        """Returns a new polynomial with all exponents shifted downwards by `n`.
+
+        Args:
+            n (int): The degree to shift down by.
+
+        Returns:
+            Polynomial: the shifted polynomial.
+        """
         return Polynomial({(power - n): coeff for power, coeff in self})
 
-    def __divmod__(self, other):
+    def __divmod__(self, other: Polynomial) -> tuple[Polynomial, Polynomial]:
+        """Returns the quotient and remainder of polynomial division.
+
+        Args:
+            other(Polynomial): The divisor polynomial. Must be non-zero.
+
+        Returns:
+            tuple[Polynomial, Polynomial]: A tuple containing the quotient and
+            remainder of division, such that *self == quotient * other +
+            remainder*.
+
+        Raises:
+            ValueError: if `other` is the zero polynomial.
+        """
         if other.is_zero:
             raise ValueError("Can't divide by zero Polynomial")
 
         quotient = Polynomial.zero()
         remainder = deepcopy(self)
 
+        # Implements long division
         while not remainder.is_zero and remainder.degree >= other.degree:
             power_r, coeff_r = remainder.leading_term
             power_d, coeff_d = other.leading_term
@@ -282,7 +461,19 @@ class Polynomial:
 
         return (quotient, remainder)
 
-    def __pow__(self, n):
+    def __pow__(self, n: int) -> Polynomial:
+        """Raise the polynomial to a non-negative integer power.
+
+        Args:
+            n (int): The exponent. Must be a non-negative integer.
+
+        Returns:
+            Polynomial: The polynomial raised to the power n.
+
+        Raises:
+            ValueError: if n is not an integer, a negative integer, or if both
+            the polynomial and n are zero.
+        """
         return self.fast_exp(n)
 
     def fast_exp(self, n):
@@ -324,14 +515,34 @@ class Polynomial:
     # Function Operations
     # ...................
 
-    def d(self):
+    def d(self) -> Polynomial:
+        """Return the derivative of the polynomial."""
         return Polynomial({(power - 1): power * coeff for power, coeff in self})
 
-    def __call__(self, x):
+    def __call__(self, x: int | float | Fraction) -> int | float | Fraction:
+        """Evaluate a polynomial at a given value.
+
+        Args:
+            x (int | float | Fraction): the value to evaluate the polynomial
+            at.
+
+        Returns:
+            int | float | Fraction: the computed value.
+        """
         return self.fast_eval(x)
 
     def fast_eval(self, x):
-        # Implements the Horner's rule for evaluating a polynomial
+        """Evaluate a polynomial at a given value using Horner's rule for
+        performance.
+
+        Args:
+            x (int | float | Fraction): the value to evaluate the polynomial
+            at.
+
+        Returns:
+            int | float | Fraction: the computed value.
+        """
+        # Implements Horner's rule for evaluating a polynomial
         result = self[self.degree]
         for power in range(self.degree - 1, -1, -1):
             result *= x
@@ -343,6 +554,15 @@ class Polynomial:
         return result
 
     def slow_eval(self, x):
+        """Evaluate a polynomial at a given value using naive evaluation.
+
+        Args:
+            x (int | float | Fraction): the value to evaluate the polynomial
+            at.
+
+        Returns:
+            int | float | Fraction: the computed value.
+        """
         result = sum((coeff * x**power for power, coeff in self))
         if isinstance(x, float):
             return float(x)
@@ -351,10 +571,33 @@ class Polynomial:
         return result
 
     def __lshift__(self, other):
+        """Return the composition of this polynomial with another polynomial.
+
+        Args:
+            other (Polynomial): The polynomial to substitue for the variable in
+            this polynomial.
+
+        Returns:
+            Polynomial: The composed polynomial which evaluates x as
+            self(other(x)).
+        """
         return self.compose(other)
 
-    def compose(self, other):
-        # Implements the Horner's rule for evaluating a polynomial
+    def compose(self, other: Polynomial) -> Polynomial:
+        """Return the composition of this polynomial with another polynomial.
+
+        Args:
+            other (Polynomial): The polynomial to substitue for the variable in
+            this polynomial.
+
+        Returns:
+            Polynomial: The composed polynomial which evaluates x as
+            self(other(x)).
+        """
+        # Implements Horner's rule for evaluating a polynomial, but does
+        # multiplication and addition on polynomials instead of fractional
+        # coefficients. This lets us efficiently substitute the `other`
+        # polynomial in for the variables in `self`.
         result = Polynomial.from_coeffs(self[self.degree])
         for power in range(self.degree - 1, -1, -1):
             result *= other
