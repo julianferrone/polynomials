@@ -75,7 +75,7 @@ class Polynomial:
                 coeff = "" if coeff == 1 else str(coeff)
                 power = "" if power == 1 else f"^{power}"
                 return f"{coeff}x{power}"
-        
+
         parts = iter(sorted(self.coeffs.items(), reverse=True))
 
         # As we filter out powers with zero coefficients when constructing a
@@ -120,6 +120,10 @@ class Polynomial:
     # --------------------
     # Algebraic Operations
     # --------------------
+
+    # .....................
+    # Arithmetic Operations
+    # .....................
 
     def __eq__(self, other):
         return self.coeffs == other.coeffs

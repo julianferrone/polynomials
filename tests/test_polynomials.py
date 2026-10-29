@@ -41,17 +41,20 @@ def test_get_any_coeff_of_zero_is_zero(power):
     coeff = Polynomial.zero()[power]
     assert coeff == 0
 
+
 @given(st.integers(min_value=0), st.fractions())
 def test_set_then_get_is_get(power, coeff):
     p = Polynomial.zero()
     p[power] = coeff
     assert p[power] == coeff
 
+
 @given(polynomial(), st.integers(min_value=0))
 def test_slice_decreases_degree(p, power):
     sliced = p.slice(0, power)
     assert sliced.degree <= p.degree
     assert sliced.degree <= power
+
 
 # ========
 # Addition
@@ -214,11 +217,13 @@ def test_differentiation_constant_term_rule(a):
     rhs = Polynomial.zero()
     assert lhs == rhs
 
+
 @given(constant_polynomial(), polynomial())
 def test_differentiation_constant_factor_rule(a, b):
     lhs = (a * b).d()
     rhs = a * b.d()
     assert lhs == rhs
+
 
 @given(polynomial(), polynomial())
 def test_differentiation_sum_rule(a, b):
@@ -226,11 +231,13 @@ def test_differentiation_sum_rule(a, b):
     rhs = a.d() + b.d()
     assert lhs == rhs
 
+
 @given(polynomial(), polynomial())
 def test_differentiation_difference_rule(a, b):
     lhs = (a - b).d()
     rhs = a.d() - b.d()
     assert lhs == rhs
+
 
 @given(polynomial(), polynomial())
 def test_differentiation_product_rule(a, b):
