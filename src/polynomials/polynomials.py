@@ -152,18 +152,13 @@ class Polynomial:
         # > ...
         # > Each operation can accept inputs with signed counts, but the output
         # > will exclude results with counts of zero or below.
-        coeffs = defaultdict(Fraction)
-        for power, coeff in self:
-            coeffs[power] += coeff
+        p = deepcopy(self)
         for power, coeff in other:
-            coeffs[power] += coeff
-        return Polynomial(coeffs)
+            p[power] += coeff
+        return p
 
     def __neg__(self):
-        coeffs = defaultdict(Fraction)
-        for power, coeff in self:
-            coeffs[power] -= coeff
-        return Polynomial(coeffs)
+        return Polynomial({power: -coeff for power, coeff in self})
 
     def __sub__(self, other):
         return self + -other
@@ -241,11 +236,11 @@ class Polynomial:
 
     def slow_mul(self, other):
         # n^2 multiplication
-        coeffs = defaultdict(Fraction)
+        p = Polynomial.zero()
         for power_a, coeff_a in self:
             for power_b, coeff_b in other:
-                coeffs[power_a + power_b] += coeff_a * coeff_b
-        return Polynomial(coeffs)
+                p[power_a + power_b] += coeff_a * coeff_b
+        return p
 
     def scale(self, x) -> Polynomial:
         return Polynomial((power: coeff * n for power, coeff in self))
