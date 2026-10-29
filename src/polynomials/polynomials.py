@@ -55,6 +55,9 @@ class Polynomial:
         else:
             self.coeffs[power] = coeff
 
+    def __iter__(self):
+        yield from self.coeffs.items()
+
     def slice(self, start, end):
         coeffs = {
             power: coeff
