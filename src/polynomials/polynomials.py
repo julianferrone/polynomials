@@ -246,10 +246,7 @@ class Polynomial:
         return Polynomial({power: coeff * n for power, coeff in self})
 
     def factor_out(self, n: int) -> Polynomial:
-        p = Polynomial.zero()
-        for power, coeff in self:
-            p[power - n] = coeff
-        return p
+        return Polynomial({(power - n): coeff for power, coeff in self})
 
     def __divmod__(self, other):
         if other.is_zero:
@@ -314,8 +311,7 @@ class Polynomial:
     # ...................
 
     def d(self):
-        coeffs = {(power - 1): power * coeff for power, coeff in self}
-        return Polynomial(coeffs)
+        return Polynomial({(power - 1): power * coeff for power, coeff in self})
 
     def __call__(self, x):
         return self.fast_eval(x)
