@@ -302,6 +302,10 @@ class Polynomial:
             p *= self
         return p
 
+    # ...................
+    # Function Operations
+    # ...................
+
     def d(self):
         coeffs = {(power - 1): power * coeff for power, coeff in self.coeffs.items()}
         return Polynomial(coeffs)
