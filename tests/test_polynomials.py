@@ -20,6 +20,18 @@ def constant_polynomial():
     return st.builds(Polynomial, st.fractions())
 
 
+def monomial():
+    return st.builds(
+        Polynomial,
+        st.dictionaries(
+            st.integers(min_value=0),
+            st.fractions().filter(lambda coeff: coeff != 0),
+            min_size=1,
+            max_size=1,
+        ),
+    )
+
+
 # ========
 # Creation
 # ========
@@ -172,6 +184,16 @@ def test_zero_polynomial_is_zero():
 @given(nonzero_polynomial())
 def test_nonzero_polynomial_is_not_zero(a):
     assert not a.is_zero
+
+
+@given(constant_polynomial())
+def test_constant_polynomial_is_constant(p):
+    assert p.is_constant
+
+
+@given(monomial())
+def test_monomial_is_monomial(p):
+    assert p.is_monomial
 
 
 @given(polynomial())
