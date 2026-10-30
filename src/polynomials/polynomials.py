@@ -234,6 +234,9 @@ class Polynomial:
     # Properties
     # ----------
 
+    def __bool__(self):
+        return not self.is_zero
+
     @property
     def is_zero(self) -> bool:
         """Whether the polynomial is the zero polynomial."""
