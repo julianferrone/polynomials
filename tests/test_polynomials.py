@@ -291,6 +291,13 @@ def test_diff_product_rule(a, b):
     assert lhs == rhs
 
 
+@given(polynomial())
+def test_diff_twice(p):
+    lhs = p.diff().diff()
+    rhs = p.diff(2)
+    assert lhs == rhs
+
+
 # ==========
 # Evaluation
 # ==========
