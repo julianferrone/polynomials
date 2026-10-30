@@ -121,8 +121,8 @@ p(5) # 3*(5^2) + 2*5 + 1 = 86
 
 # Compose polynomials
 
-print(p << q)
-print(q << p)
+print(p << q) # 3*(4x + 5)^2 + 2*(4x + 5) + 1
+print(q << p) # 4*(3x^2 + 2x + 1) + 5
 
 # Output:
 ```
