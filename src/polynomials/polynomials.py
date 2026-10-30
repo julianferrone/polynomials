@@ -591,9 +591,9 @@ class Polynomial:
             p *= self
         return p
 
-    # ...................
-    # Function Operations
-    # ...................
+    # ........
+    # Calculus
+    # ........
 
     def diff(self, n: int = 1) -> Polynomial:
         """Return the nth derivative of the polynomial.
@@ -631,6 +631,25 @@ class Polynomial:
         for _ in range(n):
             p = Polynomial({(power - 1): power * coeff for power, coeff in p})
         return p
+
+    def antidiff(self, c: int | Fraction = 0) -> Polynomial:
+        """Returns the antiderivative of the polynomial with a given constant.
+
+        Args:
+            c (int | Fraction): The constant term.
+
+        Returns:
+            Polynomial: the antiderivative polynomial with the given constant
+                term,.
+        """
+        terms = {power + 1: coeff / (power + 1) for power, coeff in self}
+        constant = Polynomial(c)
+        antiderivative = Polynomial(terms) + constant
+        return antiderivative
+
+    # ...................
+    # Function Operations
+    # ...................
 
     def __call__(self, x: int | float | Fraction) -> int | float | Fraction:
         """Evaluate a polynomial at a given value.
