@@ -204,6 +204,7 @@ def test_len_lte_degree_plus_one(p):
     degree = p.degree
     assert length <= degree + 1
 
+
 # ========
 # Division
 # ========
@@ -327,15 +328,18 @@ def test_diff_twice(p):
     rhs = p.diff(2)
     assert lhs == rhs
 
+
 # ===========
 # Integration
 # ===========
+
 
 @given(polynomial(), st.fractions())
 def test_antidiff_is_inverse_of_diff(p, c):
     antiderivative = p.antidiff(c)
     derivative = antiderivative.diff()
     assert p == derivative
+
 
 # ==========
 # Evaluation
