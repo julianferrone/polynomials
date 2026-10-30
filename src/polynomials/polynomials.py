@@ -476,7 +476,7 @@ class Polynomial:
         Returns:
             Polynomial: the shifted polynomial.
         """
-        return Polynomial({(power - n): coeff for power, coeff in self})
+        return Polynomial({power - n: coeff for power, coeff in self})
 
     def __divmod__(self, other: Polynomial) -> tuple[Polynomial, Polynomial]:
         """Returns the quotient and remainder of polynomial division.
