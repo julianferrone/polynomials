@@ -192,6 +192,11 @@ def test_monomial_is_monomial(p):
     assert p.is_monomial
 
 
+@given(monomial())
+def test_monomial_has_length_one(p):
+    assert len(p) == 1
+
+
 @given(polynomial())
 def test_len_lte_degree_plus_one(p):
     # A polynomial with degree n can have up to n + 1 terms:
