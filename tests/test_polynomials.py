@@ -340,11 +340,13 @@ def test_antidiff_is_inverse_of_diff(p, c):
     derivative = antiderivative.diff()
     assert p == derivative
 
+
 @given(polynomial(), st.fractions(), st.fractions())
 def test_definite_integral_is_anticommutative(p, a, b):
     lhs = p.definite_integral(a, b)
     rhs = p.definite_integral(b, a)
     assert lhs == -rhs
+
 
 # ==========
 # Evaluation
@@ -385,11 +387,13 @@ def test_slow_eval_equals_fast_eval(p, x):
 # Composition
 # ===========
 
+
 @given(polynomial())
 def test_comp_with_identity(p):
     # Polynomial(1, 0) = 'x'
     composed = p << Polynomial(1, 0)
     assert composed == p
+
 
 @given(
     polynomial(max_size=5),
