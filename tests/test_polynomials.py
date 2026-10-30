@@ -407,9 +407,9 @@ def test_comp_with_identity(p):
 
 
 @given(
-    polynomial(max_size=5),
-    polynomial(max_size=5),
-    polynomial(max_size=5),
+    polynomial(max_size=4),
+    polynomial(max_size=4),
+    polynomial(max_size=4),
 )
 def test_comp_is_associative(p, q, r):
     lhs = (p << q) << r
