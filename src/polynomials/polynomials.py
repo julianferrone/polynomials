@@ -66,22 +66,12 @@ class Polynomial:
 
     @classmethod
     def zero(cls) -> Polynomial:
-        """
-        Creates the constant 0 polynomial.
-
-        Returns:
-            Polynomial: The polynomial with no non-zero coefficients.
-        """
+        """Return the constant 0 polynomial."""
         return cls(0)
 
     @classmethod
     def one(cls) -> Polynomial:
-        """
-        Creates the constant 1 polynomial.
-
-        Returns:
-            Polynomial: The polynomial 1.
-        """
+        """Return the constant 1 polynomial."""
         return cls(1)
 
     @classmethod
