@@ -582,8 +582,11 @@ class Polynomial:
     # Function Operations
     # ...................
 
-    def diff(self) -> Polynomial:
-        """Return the derivative of the polynomial.
+    def diff(self, n: int = 1) -> Polynomial:
+        """Return the nth derivative of the polynomial.
+
+        Args:
+            n: Which derivative to take.
 
         Returns:
             Polynomial: the derivative polynomial.
@@ -595,10 +598,26 @@ class Polynomial:
         '4x^3 + 3x^2 + 2x + 1'
         >>> str(p.diff())
         '12x^2 + 6x + 2'
-        >>> str(p.diff().diff())
+        >>> str(p.diff(n=2))
         '24x + 6'
         """
-        return Polynomial({(power - 1): power * coeff for power, coeff in self})
+        # For any polynomial with degree d, d + 1 differentiations will take
+        # that polynomial to the zero polynomial. This early check ensures that
+        # the max running time of `diff` is linearly proportional to the degree
+        # of the polynomial.
+        #
+        # e.g. d(x^3, 4) = d(3x^2, 3) = d(6x, 2) = d(6, 1) = d(0, 0)
+        if self.degree < n:
+            return Polynomial.zero()
+
+        p = deepcopy(self)
+        # This is something of a naive implementation considering we have to
+        # perform n operations for n derivatives, but the earlier check ensures
+        # that we're only ever performing at most d differentiations for a
+        # d-degree polynomial. So it should be plenty fast enough.
+        for _ in range(n):
+            p = Polynomial({(power - 1): power * coeff for power, coeff in p})
+        return p
 
     def __call__(self, x: int | float | Fraction) -> int | float | Fraction:
         """Evaluate a polynomial at a given value.
