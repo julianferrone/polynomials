@@ -650,6 +650,19 @@ class Polynomial:
             p *= self
         return p
 
+    # ..................
+    # Spatial Transforms
+    # ..................
+
+    def shift_vertical(self, x: Fraction) -> Polynomial:
+        """Return the polynomial shifted up by x."""
+        return self + Polynomial(x)
+
+    def shift_horizontal(self, x: Fraction) -> Polynomial:
+        """Return the polynomial shifted to the right by x (to the left if x is
+        negative)."""
+        return self << (Polynomial.identity() - Polynomial(x)) 
+
     # ........
     # Calculus
     # ........
