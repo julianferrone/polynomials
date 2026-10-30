@@ -172,9 +172,9 @@ def test_mult_by_minus_one_is_add_inverse(a):
     assert sum_ == Polynomial.zero()
 
 
-# =======
-# Is Zero
-# =======
+# ==========
+# Predicates
+# ==========
 
 
 def test_zero_polynomial_is_zero():
