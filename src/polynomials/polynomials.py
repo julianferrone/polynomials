@@ -647,6 +647,25 @@ class Polynomial:
         antiderivative = Polynomial(terms) + constant
         return antiderivative
 
+    def definite_integral(
+        self, a: int | float | Fraction, b: int | float | Fraction
+    ) -> int | float | Fraction:
+        """Returns the definite integral of the polynomial over a closed
+        interval [a, b].
+
+        Args:
+            a (int | float | Fraction): The lower bound (inclusive) of the
+                interval to integrate over.
+
+            b (int | float | Fraction): The upper bound (inclusive) of the
+                interval to integrate over.
+
+        Returns:
+            int | float | Fraction: The definite integral.
+        """
+        antiderivative = self.antidiff()
+        return antiderivative(b) - antiderivative(a)
+
     # ...................
     # Function Operations
     # ...................
