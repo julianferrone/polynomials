@@ -231,6 +231,16 @@ class Polynomial:
         return False if self.coeffs else True
 
     @property
+    def is_constant(self) -> bool:
+        """Whether the polynomial is a constant polynomial."""
+        return self.degree <= 0
+
+    @property
+    def is_monomial(self) -> bool:
+        """Whether the polynomial has only one non-zero term."""
+        return len(self) == 1
+
+    @property
     def degree(self) -> int:
         """Returns the degree of the polynomial. As Polynomials are univariate,
         this is the highest exponent occurring in the polynomial.
