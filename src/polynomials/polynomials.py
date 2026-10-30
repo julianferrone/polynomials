@@ -84,6 +84,26 @@ class Polynomial:
         """
         return cls(1)
 
+    @classmethod
+    def monomial(cls, power: int, coeff: Fraction) -> Polynomial:
+        """Creates a polynomial with only one term.
+
+        Args:
+            power (int): The exponent of the term.
+
+            coeff (Fraction): The coefficient of the term.
+
+        Raises:
+            ValueError: if both power and coeff are 0 (as this defines the zero
+                polynomial).
+
+        Returns:
+            Polynomial: A polynomial with one term in it.
+        """
+        if power == 0 and coeff == 0:
+            raise ValueError("Can't create a Monomial with a constant of 0")
+        return cls({power: coeff})
+
     # ------------------
     # Coefficient Access
     # ------------------
