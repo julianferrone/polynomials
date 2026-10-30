@@ -640,7 +640,17 @@ class Polynomial:
 
         Returns:
             Polynomial: the antiderivative polynomial with the given constant
-                term,.
+                term.
+
+        Examples:
+
+        >>> p = Polynomial(1, 2, 3)
+        >>> print(p)
+        x^2 + 2x + 3
+        >>> print(p.antidiff())
+        1/3x^3 + x^2 + 3x
+        >>> print(p.antidiff(4))
+        1/3x^3 + x^2 + 3x + 4
         """
         terms = {power + 1: coeff / (power + 1) for power, coeff in self}
         constant = Polynomial(c)
