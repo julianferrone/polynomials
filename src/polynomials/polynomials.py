@@ -75,6 +75,11 @@ class Polynomial:
         return cls(1)
 
     @classmethod
+    def identity(cls) -> Polynomial:
+        """Return the identity polynomial x."""
+        return cls(1, 0)
+
+    @classmethod
     def monomial(cls, power: int, coeff: Fraction) -> Polynomial:
         """Creates a polynomial with only one term.
 
