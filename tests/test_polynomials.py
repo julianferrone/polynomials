@@ -385,6 +385,11 @@ def test_slow_eval_equals_fast_eval(p, x):
 # Composition
 # ===========
 
+@given(polynomial())
+def test_comp_with_identity(p):
+    # Polynomial(1, 0) = 'x'
+    composed = p << Polynomial(1, 0)
+    assert composed == p
 
 @given(
     polynomial(max_size=5),
