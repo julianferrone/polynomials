@@ -519,9 +519,10 @@ class Polynomial:
             power_r, coeff_r = remainder.leading_term
             power_d, coeff_d = other.leading_term
             # d for denominator
-            power_tmp = power_r - power_d
-            coeff_tmp = Fraction(coeff_r, coeff_d)
-            tmp = Polynomial({power_tmp: coeff_tmp})
+            tmp = Polynomial.monomial(
+                power_r - power_d,
+                coeff_r / coeff_d
+            )
 
             quotient += tmp
             remainder -= tmp * other
