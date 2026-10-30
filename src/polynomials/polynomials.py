@@ -192,7 +192,7 @@ class Polynomial:
     def __str__(self) -> str:
         """Human-readable string representation of a Polynomial."""
 
-        def term(power, coeff):
+        def format_term(power, coeff):
             if power == 0:
                 return str(coeff)
             else:
@@ -211,11 +211,11 @@ class Polynomial:
             return "0"
 
         s = "" if coeff >= 0 else "-"
-        s += term(power, abs(coeff))
+        s += format_term(power, abs(coeff))
         for power, coeff in parts:
             sign = " + " if coeff >= 0 else " - "
             s += sign
-            s += term(power, abs(coeff))
+            s += format_term(power, abs(coeff))
         return s
 
     def __repr__(self):
