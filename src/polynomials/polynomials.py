@@ -195,10 +195,19 @@ class Polynomial:
         def format_term(power, coeff):
             if power == 0:
                 return str(coeff)
+            if coeff == 1:
+                coeff_s = ""
+            # We want fractional coefficients to be wrapped in brackets if
+            # they're coefficients for non-constant terms, e.g. (3/4)x^2 +
+            # 1/4 instead of 3/4x^2 + 1/4. Since we've already checked whether
+            # the power is 0 (which is an early return), we know that this
+            # coefficient is for a non-constant term.
+            elif not coeff.is_integer():
+                coeff_s = f"({coeff})"
             else:
-                coeff = "" if coeff == 1 else str(coeff)
-                power = "" if power == 1 else f"^{power}"
-                return f"{coeff}x{power}"
+                coeff_s = str(coeff)
+            power_s = "" if power == 1 else f"^{power}"
+            return f"{coeff_s}x{power_s}"
 
         parts = iter(sorted(self, reverse=True))
 
@@ -475,7 +484,7 @@ class Polynomial:
         4x + 1
         >>> (quotient, remainder) = divmod(p, q)
         >>> print(quotient)
-        3/4x + 5/16
+        (3/4)x + 5/16
         >>> print(remainder)
         91/16
         >>> print(quotient * q + remainder)
@@ -648,9 +657,9 @@ class Polynomial:
         >>> print(p)
         x^2 + 2x + 3
         >>> print(p.antidiff())
-        1/3x^3 + x^2 + 3x
+        (1/3)x^3 + x^2 + 3x
         >>> print(p.antidiff(4))
-        1/3x^3 + x^2 + 3x + 4
+        (1/3)x^3 + x^2 + 3x + 4
         """
         terms = {power + 1: coeff / (power + 1) for power, coeff in self}
         constant = Polynomial(c)
