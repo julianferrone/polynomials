@@ -22,13 +22,9 @@ def constant_polynomial():
 
 def monomial():
     return st.builds(
-        Polynomial,
-        st.dictionaries(
-            st.integers(min_value=0),
-            st.fractions().filter(lambda coeff: coeff != 0),
-            min_size=1,
-            max_size=1,
-        ),
+        Polynomial.monomial,
+        power=st.integers(min_value=0),
+        coeff=st.fractions().filter(lambda coeff: coeff != 0),
     )
 
 
