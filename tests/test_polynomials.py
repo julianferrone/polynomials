@@ -174,6 +174,14 @@ def test_nonzero_polynomial_is_not_zero(a):
     assert not a.is_zero
 
 
+@given(polynomial())
+def test_len_lte_degree_plus_one(p):
+    # A polynomial with degree n can have up to n + 1 terms:
+    # ax^n + bx^(n-1) + ... + cx + d
+    length = len(p)
+    degree = p.degree
+    assert length <= degree + 1
+
 # ========
 # Division
 # ========
