@@ -468,18 +468,18 @@ class Polynomial:
         Examples:
 
         >>> p = Polynomial(3, 2, 6)
-        >>> str(p)
-        '3x^2 + 2x + 6'
+        >>> print(p)
+        3x^2 + 2x + 6
         >>> q = Polynomial(4, 1)
-        >>> str(q)
-        '4x + 1'
+        >>> print(q)
+        4x + 1
         >>> (quotient, remainder) = divmod(p, q)
-        >>> str(quotient)
-        '3/4x + 5/16'
-        >>> str(remainder)
-        '91/16'
-        >>> str(quotient * q + remainder)
-        '3x^2 + 2x + 6'
+        >>> print(quotient)
+        3/4x + 5/16
+        >>> print(remainder)
+        91/16
+        >>> print(quotient * q + remainder)
+        3x^2 + 2x + 6
         """
         if other.is_zero:
             raise ValueError("Can't divide by zero Polynomial")
@@ -517,12 +517,12 @@ class Polynomial:
         Examples:
 
         >>> p = Polynomial(1, 1)
-        >>> str(p)
-        'x + 1'
-        >>> str(p**2)
-        'x^2 + 2x + 1'
-        >>> str(p**3)
-        'x^3 + 3x^2 + 3x + 1'
+        >>> print(p)
+        x + 1
+        >>> print(p**2)
+        x^2 + 2x + 1
+        >>> print(p**3)
+        x^3 + 3x^2 + 3x + 1
         """
         return self.fast_exp(n)
 
@@ -607,12 +607,12 @@ class Polynomial:
         Examples:
 
         >>> p = Polynomial(4, 3, 2, 1)
-        >>> str(p)
-        '4x^3 + 3x^2 + 2x + 1'
-        >>> str(p.diff())
-        '12x^2 + 6x + 2'
-        >>> str(p.diff(n=2))
-        '24x + 6'
+        >>> print(p)
+        4x^3 + 3x^2 + 2x + 1
+        >>> print(p.diff())
+        12x^2 + 6x + 2
+        >>> print(p.diff(n=2))
+        24x + 6
         """
         # For any polynomial with degree d, d + 1 differentiations will take
         # that polynomial to the zero polynomial. This early check ensures that
@@ -683,8 +683,8 @@ class Polynomial:
         Examples:
 
         >>> p = Polynomial(3, -2, 1)
-        >>> str(p)
-        '3x^2 - 2x + 1'
+        >>> print(p)
+        3x^2 - 2x + 1
         >>> p(0)
         1
         >>> p(1)
@@ -748,14 +748,14 @@ class Polynomial:
 
         >>> p = Polynomial(2, 1)
         >>> q = Polynomial(3, 0, 0)
-        >>> str(p)
-        '2x + 1'
-        >>> str(q)
-        '3x^2'
-        >>> str(p << q)
-        '6x^2 + 1'
-        >>> str(q << p)
-        '12x^2 + 12x + 3'
+        >>> print(p)
+        2x + 1
+        >>> print(q)
+        3x^2
+        >>> print(p << q)
+        6x^2 + 1
+        >>> print(q << p)
+        12x^2 + 12x + 3
         """
         return self.compose(other)
 
