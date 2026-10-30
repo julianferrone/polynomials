@@ -139,6 +139,9 @@ class Polynomial:
         """
         yield from self.coeffs.items()
 
+    def __len__(self) -> int:
+        return len(self.coeffs)
+
     def split(self, split_at: int) -> tuple[Polynomial, Polynomial]:
         """Splits a polynomial into lower and higher-degree parts.
 
