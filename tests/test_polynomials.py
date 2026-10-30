@@ -281,6 +281,19 @@ def test_fast_exp_equals_slow_exp(a, n):
     rhs = a.slow_exp(n)
     assert lhs == rhs
 
+# ==================
+# Spatial Transforms
+# ==================
+
+@given(polynomial(), st.fractions(), st.fractions())
+def test_shift_vertical(p, up, x):
+    q = p.shift_vertical(up)
+    assert q(x) == p(x) + up
+
+@given(polynomial(), st.fractions(), st.fractions())
+def test_shift_horizontal(p, right, x):
+    q = p.shift_horizontal(right)
+    assert p(x) == q(x + right)
 
 # ===============
 # Differentiation
