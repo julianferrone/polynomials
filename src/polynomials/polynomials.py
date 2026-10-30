@@ -533,6 +533,37 @@ class Polynomial:
 
         return (quotient, remainder)
 
+
+    def __floordiv__(self, other: Polynomial) -> Polynomial:
+        """Returns the quotient of polynomial division.
+
+        Args:
+            other (Polynomial): The divisor polynomial. Must be non-zero.
+
+        Returns:
+            Polynomial: The quotient polynomial.
+
+        Raises:
+            ValueError: if `other` is the zero polynomial.
+        """
+        quotient, _ = divmod(self, other)
+        return quotient
+
+    def __mod__(self, other: Polynomial) -> Polynomial:
+        """Returns the quotient of polynomial division.
+
+        Args:
+            other (Polynomial): The divisor polynomial. Must be non-zero.
+
+        Returns:
+            Polynomial: The quotient polynomial.
+
+        Raises:
+            ValueError: if `other` is the zero polynomial.
+        """
+        _, remainder = divmod(self, other)
+        return remainder
+
     def __pow__(self, n: int) -> Polynomial:
         """Raise the polynomial to a non-negative integer power.
 
