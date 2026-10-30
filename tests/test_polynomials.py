@@ -340,6 +340,11 @@ def test_antidiff_is_inverse_of_diff(p, c):
     derivative = antiderivative.diff()
     assert p == derivative
 
+@given(polynomial(), st.fractions(), st.fractions())
+def test_definite_integral_is_anticommutative(p, a, b):
+    lhs = p.definite_integral(a, b)
+    rhs = p.definite_integral(b, a)
+    assert lhs == -rhs
 
 # ==========
 # Evaluation
