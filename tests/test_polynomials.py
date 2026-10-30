@@ -230,6 +230,17 @@ def test_divmod_by_one_is_mult_inverse(a):
     lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
     assert lhs_quotient * a + lhs_remainder == Polynomial.one()
 
+@given(polynomial(), nonzero_polynomial())
+def test_divmod_quotient_equals_floordiv_quotient(p, q):
+    divmod_quotient, _ = divmod(p, q)
+    floordiv_quotient = p // q
+    assert divmod_quotient == floordiv_quotient
+
+@given(polynomial(), nonzero_polynomial())
+def test_divmod_remainder_equals_mod_remainder(p, q):
+    _, divmod_remainder = divmod(p, q)
+    floordiv_remainder = p % q
+    assert divmod_remainder == floordiv_remainder
 
 # ==============
 # Exponentiation
