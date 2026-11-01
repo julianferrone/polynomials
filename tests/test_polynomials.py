@@ -285,6 +285,16 @@ def test_fast_exp_equals_slow_exp(a, n):
 # Spatial Transforms
 # ==================
 
+@given(polynomial())
+def test_shift_vertical_zero_is_noop(p):
+    q = p.shift_vertical(0)
+    assert p == q
+
+@given(polynomial())
+def test_shift_horizontal_zero_is_noop(p):
+    q = p.shift_horizontal(0)
+    assert p == q
+
 @given(polynomial(), st.fractions(), st.fractions())
 def test_shift_vertical(p, up, x):
     q = p.shift_vertical(up)
