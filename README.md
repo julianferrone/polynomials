@@ -6,13 +6,14 @@ A Python library for performing arithmetic and algebraic operations on univariat
 
 - Represent univariate polynomials with integer or fractional coefficients
 - Access polynomial coefficients, degree, and leading term
-- Add, subtract, and negate polynomials
-- Multiply polynomials
+- Addition, subtraction, negation, multiplication
 - Scale polynomials by a constant factor
-- Divide polynomials (obtaining a quotient and a remainder)
-- Exponentiate polynomials with an integer power
-- Evaluate polynomials at a given (integer, fractional, or floating) point
-- Differentiate polynomials
+- Division (obtaining a quotient and a remainder), floor division, and modulo
+- Exponentiation with an integer power
+- Shifting polynomials left, right, up, and down
+- Evaluate polynomials at a given (integer, fractional, or floating) value
+- Differentiation
+- Indefinite and definite integration
 - Compose polynomials
 
 ## Install
