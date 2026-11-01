@@ -519,16 +519,12 @@ class Polynomial:
             power_r, coeff_r = remainder.leading_term
             power_d, coeff_d = other.leading_term
             # d for denominator
-            tmp = Polynomial.monomial(
-                power_r - power_d,
-                coeff_r / coeff_d
-            )
+            tmp = Polynomial.monomial(power_r - power_d, coeff_r / coeff_d)
 
             quotient += tmp
             remainder -= tmp * other
 
         return (quotient, remainder)
-
 
     def __floordiv__(self, other: Polynomial) -> Polynomial:
         """Returns the quotient of polynomial division.
@@ -661,7 +657,7 @@ class Polynomial:
     def shift_horizontal(self, x: Fraction) -> Polynomial:
         """Return the polynomial shifted to the right by x (to the left if x is
         negative)."""
-        return self << (Polynomial.identity() - Polynomial(x)) 
+        return self << (Polynomial.identity() - Polynomial(x))
 
     # ........
     # Calculus

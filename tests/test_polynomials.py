@@ -230,17 +230,20 @@ def test_divmod_by_one_is_mult_inverse(a):
     lhs_quotient, lhs_remainder = divmod(Polynomial.one(), a)
     assert lhs_quotient * a + lhs_remainder == Polynomial.one()
 
+
 @given(polynomial(), nonzero_polynomial())
 def test_divmod_quotient_equals_floordiv_quotient(p, q):
     divmod_quotient, _ = divmod(p, q)
     floordiv_quotient = p // q
     assert divmod_quotient == floordiv_quotient
 
+
 @given(polynomial(), nonzero_polynomial())
 def test_divmod_remainder_equals_mod_remainder(p, q):
     _, divmod_remainder = divmod(p, q)
     floordiv_remainder = p % q
     assert divmod_remainder == floordiv_remainder
+
 
 # ==============
 # Exponentiation
@@ -281,29 +284,35 @@ def test_fast_exp_equals_slow_exp(a, n):
     rhs = a.slow_exp(n)
     assert lhs == rhs
 
+
 # ==================
 # Spatial Transforms
 # ==================
+
 
 @given(polynomial())
 def test_shift_vertical_zero_is_noop(p):
     q = p.shift_vertical(0)
     assert p == q
 
+
 @given(polynomial())
 def test_shift_horizontal_zero_is_noop(p):
     q = p.shift_horizontal(0)
     assert p == q
+
 
 @given(polynomial(), st.fractions(), st.fractions())
 def test_shift_vertical(p, up, x):
     q = p.shift_vertical(up)
     assert q(x) == p(x) + up
 
+
 @given(polynomial(), st.fractions(), st.fractions())
 def test_shift_horizontal(p, right, x):
     q = p.shift_horizontal(right)
     assert p(x) == q(x + right)
+
 
 # ===============
 # Differentiation
