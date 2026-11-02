@@ -39,6 +39,91 @@ def test_zero():
     assert lhs == rhs
 
 
+# ==================
+# Logical Predicates
+# ==================
+
+
+# -----------------
+# Predicates on (0)
+# -----------------
+
+
+def test_zero_is_zero():
+    zero = Polynomial.zero()
+    assert zero.is_zero
+
+
+def test_zero_is_constant():
+    zero = Polynomial.zero()
+    assert zero.is_constant
+
+
+def test_zero_is_not_monomial():
+    zero = Polynomial.zero()
+    assert not zero.is_monomial
+
+
+# -----------------
+# Predicates on (1)
+# -----------------
+
+
+def test_one_is_not_zero():
+    one = Polynomial.one()
+    assert not one.is_zero
+
+
+def test_one_is_constant():
+    one = Polynomial.one()
+    assert one.is_constant
+
+
+def test_one_is_monomial():
+    one = Polynomial.one()
+    assert one.is_monomial
+
+
+# -----------------
+# Predicates on (x)
+# -----------------
+
+
+def test_identity_is_not_zero():
+    p = Polynomial.identity()
+    assert not p.is_zero
+
+
+def test_identity_is_not_constant():
+    p = Polynomial.identity()
+    assert not p.is_constant
+
+
+def test_identity_is_monomial():
+    p = Polynomial.identity()
+    assert p.is_monomial
+
+
+# ---------------------
+# Predicates on (x + 1)
+# ---------------------
+
+
+def test_x_plus_one_is_not_zero():
+    p = Polynomial(1, 1)
+    assert not p.is_zero
+
+
+def test_x_plus_one_is_not_constant():
+    p = Polynomial(1, 1)
+    assert not p.is_constant
+
+
+def test_x_plus_one_is_not_monomial():
+    p = Polynomial(1, 1)
+    assert not p.is_monomial
+
+
 # ============================
 # Array Access on Coefficients
 # ============================
