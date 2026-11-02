@@ -837,6 +837,32 @@ class Polynomial:
         """
         return self.compose(other)
 
+    def __rshift__(self, other):
+        """Return the composition of another polynomial with this polynomial.
+
+        Args:
+            other (Polynomial): The polynomial whose variable will be
+            substituted with this polynomial.
+
+        Returns:
+            Polynomial: The composed polynomial which evaluates x as
+            other(self(x)).
+
+        Examples:
+
+        >>> p = Polynomial(2, 1)
+        >>> q = Polynomial(3, 0, 0)
+        >>> print(p)
+        2x + 1
+        >>> print(q)
+        3x^2
+        >>> print(p >> q)
+        12x^2 + 12x + 3
+        >>> print(q >> p)
+        6x^2 + 1
+        """
+        return other.compose(self)
+
     def compose(self, other: Polynomial) -> Polynomial:
         """Return the composition of this polynomial with another polynomial.
 
