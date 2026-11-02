@@ -123,6 +123,7 @@ def test_x_plus_one_is_not_monomial():
     p = Polynomial(1, 1)
     assert not p.is_monomial
 
+
 # =====================
 # String Representation
 # =====================
@@ -140,10 +141,13 @@ POLYNOMIAL_REPS = [
     (Polynomial(1, 0, -2), "x^2 - 2"),
     (Polynomial(-1, 0, -2), "-x^2 - 2"),
 ]
+
+
 @pytest.mark.parametrize("p,expected", POLYNOMIAL_REPS)
 def test_polynomial_str_representation(p, expected):
     s = str(p)
     assert s == expected
+
 
 # ============================
 # Array Access on Coefficients
