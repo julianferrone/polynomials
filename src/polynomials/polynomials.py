@@ -815,7 +815,7 @@ class Polynomial:
         """Return the composition of this polynomial with another polynomial.
 
         Args:
-            other (Polynomial): The polynomial to substitue for the variable in
+            other (Polynomial): The polynomial to substitute for the variable in
             this polynomial.
 
         Returns:
