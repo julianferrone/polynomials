@@ -80,7 +80,7 @@ class Polynomial:
         return cls(1, 0)
 
     @classmethod
-    def monomial(cls, power: int, coeff: Fraction) -> Polynomial:
+    def monomial(cls, power: int, coeff: int | Fraction) -> Polynomial:
         """Creates a polynomial with only one term.
 
         Args:
