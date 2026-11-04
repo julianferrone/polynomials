@@ -7,7 +7,7 @@ from math import ceil
 
 
 class Polynomial:
-    coeffs: defaultdict[int, Fractional]
+    coeffs: defaultdict[int, Fraction]
 
     # ------------
     # Constructors
