@@ -301,8 +301,18 @@ class Polynomial:
     # Arithmetic Operations
     # .....................
 
-    def __eq__(self, other: Polynomial) -> bool:
-        """Compares two polynomials by their coefficients."""
+    def __eq__(self, other: object) -> bool:
+        """Check whether two polynomials are equal.
+
+        Args:
+            other (object): The object to compare with this polynomial.
+
+        Returns:
+            bool: True if other is a Polynomial with the same coefficients,
+            False otherwise.
+        """
+        if not isinstance(other, Polynomial):
+            return False
         return self.coeffs == other.coeffs
 
     def __add__(self, other: Polynomial) -> Polynomial:
