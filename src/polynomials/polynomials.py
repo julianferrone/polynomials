@@ -1,6 +1,6 @@
 from __future__ import annotations
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterator
 from copy import deepcopy
 from fractions import Fraction
 from math import ceil
