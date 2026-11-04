@@ -207,7 +207,7 @@ class Polynomial:
     def __str__(self) -> str:
         """Human-readable string representation of a Polynomial."""
 
-        def format_term(power, coeff):
+        def format_term(power: int, coeff: Fraction) -> str:
             if power == 0:
                 return str(coeff)
             if coeff == 1:
@@ -249,13 +249,13 @@ class Polynomial:
     # Properties
     # ----------
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return not self.is_zero
 
     @property
     def is_zero(self) -> bool:
         """Whether the polynomial is the zero polynomial."""
-        return False if self.coeffs else True
+        return not self.coeffs
 
     @property
     def is_constant(self) -> bool:
@@ -333,11 +333,11 @@ class Polynomial:
             p[power] += coeff
         return p
 
-    def __neg__(self):
+    def __neg__(self) -> Polynomial:
         """Return a new polynomial with every coefficient negated."""
         return Polynomial({power: -coeff for power, coeff in self})
 
-    def __sub__(self, other):
+    def __sub__(self, other: Polynomial) -> Polynomial:
         """Subtract one polynomial from another.
 
         Args:
@@ -348,7 +348,7 @@ class Polynomial:
         """
         return self + -other
 
-    def __mul__(self, other):
+    def __mul__(self, other: Polynomial) -> Polynomial:
         """Multiply two polynomials together.
 
         Args:
@@ -359,7 +359,7 @@ class Polynomial:
         """
         return self.fast_mul(other)
 
-    def fast_mul(self, other):
+    def fast_mul(self, other: Polynomial) -> Polynomial:
         """Multiply two polynomials together. Implements Karatsuba's
         multiplication algorithm on polynomials.
 
@@ -438,7 +438,7 @@ class Polynomial:
                 values.append(r)
         return values.pop()
 
-    def slow_mul(self, other):
+    def slow_mul(self, other: Polynomial) -> Polynomial:
         """Multiply two polynomials together. Implements naive multiplication
         on polynomials.
 
@@ -650,11 +650,11 @@ class Polynomial:
     # Spatial Transforms
     # ..................
 
-    def shift_vertical(self, x: Fraction) -> Polynomial:
+    def shift_vertical(self, x: int | Fraction) -> Polynomial:
         """Return the polynomial shifted up by x."""
         return self + Polynomial(x)
 
-    def shift_horizontal(self, x: Fraction) -> Polynomial:
+    def shift_horizontal(self, x: int | Fraction) -> Polynomial:
         """Return the polynomial shifted to the right by x (to the left if x is
         negative)."""
         return self << (Polynomial.identity() - Polynomial(x))
@@ -772,7 +772,7 @@ class Polynomial:
         """
         return self.fast_eval(x)
 
-    def fast_eval(self, x):
+    def fast_eval(self, x: int | float | Fraction) -> int | float | Fraction:
         """Evaluate a polynomial at a given value using Horner's rule for
         performance.
 
@@ -794,7 +794,7 @@ class Polynomial:
             return int(result)
         return result
 
-    def slow_eval(self, x):
+    def slow_eval(self, x: int | float | Fraction) -> int | float | Fraction:
         """Evaluate a polynomial at a given value using naive evaluation.
 
         Args:
@@ -811,7 +811,7 @@ class Polynomial:
             return int(result)
         return result
 
-    def __lshift__(self, other):
+    def __lshift__(self, other: Polynomial) -> Polynomial:
         """Return the composition of this polynomial with another polynomial.
 
         Args:
@@ -837,7 +837,7 @@ class Polynomial:
         """
         return self.compose(other)
 
-    def __rshift__(self, other):
+    def __rshift__(self, other: Polynomial) -> Polynomial:
         """Return the composition of another polynomial with this polynomial.
 
         Args:
