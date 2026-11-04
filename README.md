@@ -1,4 +1,4 @@
-# README
+# Polynomials
 
 A Python library for performing arithmetic and algebraic operations on univariate polynomials.
 
