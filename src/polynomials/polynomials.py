@@ -6,6 +6,13 @@ from fractions import Fraction
 from math import ceil
 
 
+def assert_is_exponent(x: int):
+    if not isinstance(x, int):
+        raise TypeError("polynomial keys must be integers, not %s" % type(x))
+    if x < 0:
+        raise KeyError("polynomial keys must be non-negative, got %s" % x)
+
+
 class Polynomial:
     coeffs: defaultdict[int, Fraction]
 
@@ -114,6 +121,7 @@ class Polynomial:
             Fraction: The coefficient for the given exponent. Returns 0 if
                 there is no coefficient.
         """
+        assert_is_exponent(power)
         return self.coeffs.get(power, Fraction(0))
 
     def __setitem__(self, power: int, coeff: Fraction):
@@ -124,6 +132,7 @@ class Polynomial:
             power (int): The exponent.
             coeff (Fraction): The coefficient to set.
         """
+        assert_is_exponent(power)
         if 0 > power:
             pass
         elif coeff == 0:
@@ -138,6 +147,7 @@ class Polynomial:
         Arguments:
             power (int): The exponent.
         """
+        assert_is_exponent(power)
         # `del self.coeffs[power]` would fail with a KeyError if the power isn't
         # found. We want deletion to be an idempotent operation, so we `pop` and
         # don't return the coefficient.
