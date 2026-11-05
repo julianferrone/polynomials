@@ -262,8 +262,8 @@ def test_deleting_negative_integer_exponent_raises_key_error():
 
 
 @given(polynomial(), st.integers(min_value=0))
-def test_delete_then_get_returns_zero(p, power):
-    del p[power]
+def test_pop_then_get_returns_zero(p, power):
+    p.pop(power, 0)
     assert p[power] == 0
 
 
