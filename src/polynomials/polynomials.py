@@ -122,6 +122,9 @@ class Polynomial:
                 there is no coefficient.
         """
         assert_is_exponent(power)
+        return self.get(power)
+
+    def get(self, power: int, default: Fraction = Fraction(0)) -> Fraction:
         return self.coeffs.get(power, Fraction(0))
 
     def __setitem__(self, power: int, coeff: Fraction):
