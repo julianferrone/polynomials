@@ -4,6 +4,7 @@ from collections.abc import Iterator
 from copy import deepcopy
 from fractions import Fraction
 from math import ceil
+from typing import Optional
 
 
 def assert_is_exponent(x: int):
@@ -151,10 +152,12 @@ class Polynomial:
             power (int): The exponent.
         """
         assert_is_exponent(power)
-        # `del self.coeffs[power]` would fail with a KeyError if the power isn't
-        # found. We want deletion to be an idempotent operation, so we `pop` and
-        # don't return the coefficient.
-        self.coeffs.pop(power, None)
+        del self.coeffs[power]
+
+    def pop(self, power: int, default: Optional[Fraction] = None) -> Fraction:
+        if default is None:
+            return self.coeffs.pop(power)
+        return self.coeffs.pop(power, default)
 
     def __iter__(self) -> Iterator[tuple[int, Fraction]]:
         """
