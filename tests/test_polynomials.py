@@ -1,3 +1,4 @@
+from fractions import Fraction
 from polynomials import Polynomial
 
 from hypothesis import given, strategies as st
@@ -153,6 +154,19 @@ def test_polynomial_str_representation(p, expected):
 # Array Access on Coefficients
 # ============================
 
+# --------------------
+# Get Term by Exponent
+# --------------------
+
+
+def test_exponents_map_to_coefficients():
+    # p(x) = 3x^3 + 2x + 1
+    p = Polynomial([3, 0, 2, 1])
+    assert p[3] == 3
+    assert p[2] == 0
+    assert p[1] == 2
+    assert p[0] == 1
+
 
 @given(st.integers(min_value=0))
 def test_get_any_coeff_of_zero_is_zero(power):
@@ -160,10 +174,91 @@ def test_get_any_coeff_of_zero_is_zero(power):
     assert coeff == 0
 
 
+def test_get_on_zero_is_zero():
+    zero = Polynomial([0])
+    zero[3]
+    assert zero.is_zero
+
+
+def test_getting_non_integer_exponent_raises_type_error():
+    p = Polynomial([0])
+    with pytest.raises(TypeError):
+        # We are testing that invalid argument types get caught at runtime
+        p[2.5]  # ty: ignore[invalid-argument-type]
+
+
+def test_getting_negative_integer_exponent_raises_key_error():
+    p = Polynomial([0])
+    with pytest.raises(KeyError):
+        p[-3]
+
+
+# --------------------
+# Set Term by Exponent
+# --------------------
+
+
+def test_setting_coefficient():
+    p = Polynomial([0])
+    p[10] = Fraction(5)
+    assert p[10] == 5
+
+
+def test_setting_coefficient_to_zero():
+    p = Polynomial([0])
+    p[10] = Fraction(0)
+    assert p[10] == 0
+    assert p.is_zero
+
+
+def test_setting_non_integer_exponent_raises_type_error():
+    p = Polynomial([0])
+    with pytest.raises(TypeError):
+        # We are testing that invalid argument types get caught at runtime
+        p[2.5] = 5  # ty: ignore[invalid-assignment]
+
+
+def test_setting_negative_exponent_raises_key_error():
+    p = Polynomial([0])
+    with pytest.raises(KeyError):
+        p[-5] = Fraction(5)
+
+
 @given(polynomial(), st.integers(min_value=0), st.fractions())
 def test_set_then_get_is_set(p, power, coeff):
     p[power] = coeff
     assert p[power] == coeff
+
+
+# -----------------------
+# Delete Term by Exponent
+# -----------------------
+
+
+def test_deleting_coefficients():
+    # p(x) = 2x^2 + x + 1
+    p = Polynomial([3, 2, 1])
+    del p[1]
+    assert p[1] == 0
+
+
+def test_deleting_nonexistent_exponent_raises_key_error():
+    p = Polynomial([1, 0])
+    with pytest.raises(KeyError):
+        del p[10]
+
+
+def test_deleting_non_integer_exponent_raises_type_error():
+    p = Polynomial([1, 0])
+    with pytest.raises(TypeError):
+        # We are testing that invalid argument types get caught at runtime
+        del p[3.5]  # ty: ignore[invalid-argument-type]
+
+
+def test_deleting_negative_integer_exponent_raises_key_error():
+    p = Polynomial([1, 0])
+    with pytest.raises(KeyError):
+        del p[-1]
 
 
 @given(polynomial(), st.integers(min_value=0))
