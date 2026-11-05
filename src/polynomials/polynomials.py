@@ -137,10 +137,8 @@ class Polynomial:
             coeff (Fraction): The coefficient to set.
         """
         assert_is_exponent(power)
-        if 0 > power:
-            pass
-        elif coeff == 0:
-            del self[power]
+        if coeff == 0:
+            self.coeffs.pop(power, 0)
         else:
             self.coeffs[power] = coeff
 
