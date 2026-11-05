@@ -24,7 +24,7 @@ def constant_polynomial():
 def monomial():
     return st.builds(
         Polynomial.monomial,
-        power=st.integers(min_value=0),
+        exponent=st.integers(min_value=0),
         coeff=st.fractions().filter(lambda coeff: coeff != 0),
     )
 
@@ -169,8 +169,8 @@ def test_exponents_map_to_coefficients():
 
 
 @given(st.integers(min_value=0))
-def test_get_any_coeff_of_zero_is_zero(power):
-    coeff = Polynomial.zero()[power]
+def test_get_any_coeff_of_zero_is_zero(exponent):
+    coeff = Polynomial.zero()[exponent]
     assert coeff == 0
 
 
@@ -225,9 +225,9 @@ def test_setting_negative_exponent_raises_key_error():
 
 
 @given(polynomial(), st.integers(min_value=0), st.fractions())
-def test_set_then_get_is_set(p, power, coeff):
-    p[power] = coeff
-    assert p[power] == coeff
+def test_set_then_get_is_set(p, exponent, coeff):
+    p[exponent] = coeff
+    assert p[exponent] == coeff
 
 
 # -----------------------
@@ -262,16 +262,16 @@ def test_deleting_negative_integer_exponent_raises_key_error():
 
 
 @given(polynomial(), st.integers(min_value=0))
-def test_pop_then_get_returns_zero(p, power):
-    p.pop(power, 0)
-    assert p[power] == 0
+def test_pop_then_get_returns_zero(p, exponent):
+    p.pop(exponent, 0)
+    assert p[exponent] == 0
 
 
 @given(polynomial(), st.integers(min_value=0))
-def test_slice_decreases_degree(p, power):
-    sliced = p.slice(0, power)
+def test_slice_decreases_degree(p, exponent):
+    sliced = p.slice(0, exponent)
     assert sliced.degree <= p.degree
-    assert sliced.degree <= power
+    assert sliced.degree <= exponent
 
 
 # ========
@@ -477,7 +477,7 @@ def test_exp_product_rule(a, m, n):
     st.integers(min_value=0, max_value=4),
     st.integers(min_value=0, max_value=4),
 )
-def test_exp_power_of_power_rule(a, m, n):
+def test_exp_exponent_of_exponent_rule(a, m, n):
     lhs = (a**m) ** n
     rhs = a ** (m * n)
     assert lhs == rhs

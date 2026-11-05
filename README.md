@@ -7,7 +7,7 @@ A Python library for performing arithmetic and algebraic operations on univariat
 - Represent univariate polynomials with integer or fractional coefficients
 - Addition, subtraction, negation, multiplication
 - Division (obtaining a quotient and a remainder), floor division, and modulo
-- Exponentiation with an integer power
+- Exponentiation with an integer exponent
 - Shifting polynomials left, right, up, and down
 - Scale polynomials by a constant factor
 - Differentiation
@@ -98,7 +98,7 @@ Division by the zero polynomial raises a `ValueError`.
 
 ### 3. Exponentiation
 
-Use the `**` operator to raise a polynomial to a non-negative integer power.
+Use the `**` operator to raise a polynomial to a non-negative integer exponent.
 
 ```python
 p = Polynomial(1, 1)  # x + 1
@@ -217,8 +217,8 @@ You can iterate over the individual terms:
 ```python
 p = Polynomial({3: 4, 1: 2, 0: 5})
 
-for power, coefficient in p:
-    print(f"Power: {power}, Coefficient: {coefficient}")
+for exponent, coefficient in p:
+    print(f"Power: {exponent}, Coefficient: {coefficient}")
 ```
 
 Each iteration yields an `(exponent, coefficient)` pair.

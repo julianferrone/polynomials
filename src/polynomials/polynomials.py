@@ -56,7 +56,7 @@ class Polynomial:
         elif isinstance(arg, (list, tuple)):
             # We need to iterate in reverse order so that users can
             # define the polynomials in standard form (i.e. highest
-            # powers first:
+            # exponents first:
             #
             # >>> print(Polynomial(1, -2, 3))
             # x^2 - 2x + 3
@@ -66,9 +66,9 @@ class Polynomial:
             coeffs = {0: arg}
 
         normalised_coeffs = {
-            power: Fraction(coeff)
-            for power, coeff in coeffs.items()
-            if power >= 0 and coeff != 0
+            exponent: Fraction(coeff)
+            for exponent, coeff in coeffs.items()
+            if exponent >= 0 and coeff != 0
         }
         self.coeffs = defaultdict(Fraction, normalised_coeffs)
 
@@ -88,74 +88,74 @@ class Polynomial:
         return cls(1, 0)
 
     @classmethod
-    def monomial(cls, power: int, coeff: int | Fraction) -> Polynomial:
+    def monomial(cls, exponent: int, coeff: int | Fraction) -> Polynomial:
         """Creates a polynomial with only one term.
 
         Args:
-            power (int): The exponent of the term.
+            exponent (int): The exponent of the term.
 
             coeff (Fraction): The coefficient of the term.
 
         Raises:
-            ValueError: if both power and coeff are 0 (as this defines the zero
+            ValueError: if both exponent and coeff are 0 (as this defines the zero
                 polynomial).
 
         Returns:
             Polynomial: A polynomial with one term in it.
         """
-        if power == 0 and coeff == 0:
+        if exponent == 0 and coeff == 0:
             raise ValueError("Can't create a Monomial with a constant of 0")
-        return cls({power: coeff})
+        return cls({exponent: coeff})
 
     # ------------------
     # Coefficient Access
     # ------------------
 
-    def __getitem__(self, power: int) -> Fraction:
+    def __getitem__(self, exponent: int) -> Fraction:
         """
         Returns the coefficient at a given exponent.
 
         Arguments:
-            power (int): The exponent.
+            exponent (int): The exponent.
 
         Returns:
             Fraction: The coefficient for the given exponent. Returns 0 if
                 there is no coefficient.
         """
-        assert_is_exponent(power)
-        return self.get(power)
+        assert_is_exponent(exponent)
+        return self.get(exponent)
 
-    def get(self, power: int, default: Fraction = Fraction(0)) -> Fraction:
-        return self.coeffs.get(power, Fraction(0))
+    def get(self, exponent: int, default: Fraction = Fraction(0)) -> Fraction:
+        return self.coeffs.get(exponent, Fraction(0))
 
-    def __setitem__(self, power: int, coeff: Fraction):
+    def __setitem__(self, exponent: int, coeff: Fraction):
         """
         Sets the coefficient for a given exponent.
 
         Arguments:
-            power (int): The exponent.
+            exponent (int): The exponent.
             coeff (Fraction): The coefficient to set.
         """
-        assert_is_exponent(power)
+        assert_is_exponent(exponent)
         if coeff == 0:
-            self.coeffs.pop(power, 0)
+            self.coeffs.pop(exponent, 0)
         else:
-            self.coeffs[power] = coeff
+            self.coeffs[exponent] = coeff
 
-    def __delitem__(self, power: int):
+    def __delitem__(self, exponent: int):
         """
         Deletes the coefficient for a given exponent.
 
         Arguments:
-            power (int): The exponent.
+            exponent (int): The exponent.
         """
-        assert_is_exponent(power)
-        del self.coeffs[power]
+        assert_is_exponent(exponent)
+        del self.coeffs[exponent]
 
-    def pop(self, power: int, default: Optional[Fraction] = None) -> Fraction:
+    def pop(self, exponent: int, default: Optional[Fraction] = None) -> Fraction:
         if default is None:
-            return self.coeffs.pop(power)
-        return self.coeffs.pop(power, default)
+            return self.coeffs.pop(exponent)
+        return self.coeffs.pop(exponent, default)
 
     def __iter__(self) -> Iterator[tuple[int, Fraction]]:
         """
@@ -189,11 +189,11 @@ class Polynomial:
         """
         lower = Polynomial.zero()
         upper = Polynomial.zero()
-        for power, coeff in self:
-            if power < split_at:
-                lower[power] = coeff
+        for exponent, coeff in self:
+            if exponent < split_at:
+                lower[exponent] = coeff
             else:
-                upper[power - split_at] = coeff
+                upper[exponent - split_at] = coeff
         return (lower, upper)
 
     def slice(self, start: int, end: int) -> Polynomial:
@@ -207,10 +207,12 @@ class Polynomial:
 
         Returns:
             Polynomial: A new polynomial containing only terms whose exponents
-            satisfy *start <= power < end*.
+            satisfy *start <= exponent < end*.
         """
         coeffs = {
-            power: coeff for power, coeff in self if start <= power and power < end
+            exponent: coeff
+            for exponent, coeff in self
+            if start <= exponent and exponent < end
         }
         return Polynomial(coeffs)
 
@@ -221,39 +223,39 @@ class Polynomial:
     def __str__(self) -> str:
         """Human-readable string representation of a Polynomial."""
 
-        def format_term(power: int, coeff: Fraction) -> str:
-            if power == 0:
+        def format_term(exponent: int, coeff: Fraction) -> str:
+            if exponent == 0:
                 return str(coeff)
             if coeff == 1:
                 coeff_s = ""
             # We want fractional coefficients to be wrapped in brackets if
             # they're coefficients for non-constant terms, e.g. (3/4)x^2 +
             # 1/4 instead of 3/4x^2 + 1/4. Since we've already checked whether
-            # the power is 0 (which is an early return), we know that this
+            # the exponent is 0 (which is an early return), we know that this
             # coefficient is for a non-constant term.
             elif not coeff.is_integer():
                 coeff_s = f"({coeff})"
             else:
                 coeff_s = str(coeff)
-            power_s = "" if power == 1 else f"^{power}"
-            return f"{coeff_s}x{power_s}"
+            exponent_s = "" if exponent == 1 else f"^{exponent}"
+            return f"{coeff_s}x{exponent_s}"
 
         parts = iter(sorted(self, reverse=True))
 
-        # As we filter out powers with zero coefficients when constructing a
+        # As we filter out exponents with zero coefficients when constructing a
         # Polynomial, a zero Polynomial will have an empty Counter and so
         # next() will fail with a StopIteration
         try:
-            power, coeff = next(parts)
+            exponent, coeff = next(parts)
         except StopIteration:
             return "0"
 
         s = "" if coeff >= 0 else "-"
-        s += format_term(power, abs(coeff))
-        for power, coeff in parts:
+        s += format_term(exponent, abs(coeff))
+        for exponent, coeff in parts:
             sign = " + " if coeff >= 0 else " - "
             s += sign
-            s += format_term(power, abs(coeff))
+            s += format_term(exponent, abs(coeff))
         return s
 
     def __repr__(self):
@@ -340,7 +342,7 @@ class Polynomial:
         """
         # Note: it would be great to just implement this with something like
         # a Counter, and then add them together:
-        # `coeffs = self.coeffs + power.coeffs`
+        # `coeffs = self.coeffs + exponent.coeffs`
         #
         # However, these operations on Counters exclude outputs with negative
         # counts. As per the docs on Counter objects:
@@ -353,13 +355,13 @@ class Polynomial:
         # > Each operation can accept inputs with signed counts, but the output
         # > will exclude results with counts of zero or below.
         p = deepcopy(self)
-        for power, coeff in other:
-            p[power] += coeff
+        for exponent, coeff in other:
+            p[exponent] += coeff
         return p
 
     def __neg__(self) -> Polynomial:
         """Return a new polynomial with every coefficient negated."""
-        return Polynomial({power: -coeff for power, coeff in self})
+        return Polynomial({exponent: -coeff for exponent, coeff in self})
 
     def __sub__(self, other: Polynomial) -> Polynomial:
         """Subtract one polynomial from another.
@@ -474,9 +476,9 @@ class Polynomial:
         """
         # n^2 multiplication
         p = Polynomial.zero()
-        for power_a, coeff_a in self:
-            for power_b, coeff_b in other:
-                p[power_a + power_b] += coeff_a * coeff_b
+        for exponent_a, coeff_a in self:
+            for exponent_b, coeff_b in other:
+                p[exponent_a + exponent_b] += coeff_a * coeff_b
         return p
 
     def scale(self, factor: int | Fraction) -> Polynomial:
@@ -489,7 +491,7 @@ class Polynomial:
         Returns:
             Polynomial: the scaled polynomial.
         """
-        return Polynomial({power: coeff * factor for power, coeff in self})
+        return Polynomial({exponent: coeff * factor for exponent, coeff in self})
 
     def factor_out(self, n: int) -> Polynomial:
         """Returns a new polynomial with all exponents shifted downwards by `n`.
@@ -500,7 +502,7 @@ class Polynomial:
         Returns:
             Polynomial: the shifted polynomial.
         """
-        return Polynomial({power - n: coeff for power, coeff in self})
+        return Polynomial({exponent - n: coeff for exponent, coeff in self})
 
     def __divmod__(self, other: Polynomial) -> tuple[Polynomial, Polynomial]:
         """Returns the quotient and remainder of polynomial division.
@@ -540,10 +542,10 @@ class Polynomial:
 
         # Implements long division
         while not remainder.is_zero and remainder.degree >= other.degree:
-            power_r, coeff_r = remainder.leading_term
-            power_d, coeff_d = other.leading_term
+            exponent_r, coeff_r = remainder.leading_term
+            exponent_d, coeff_d = other.leading_term
             # d for denominator
-            tmp = Polynomial.monomial(power_r - power_d, coeff_r / coeff_d)
+            tmp = Polynomial.monomial(exponent_r - exponent_d, coeff_r / coeff_d)
 
             quotient += tmp
             remainder -= tmp * other
@@ -581,13 +583,13 @@ class Polynomial:
         return remainder
 
     def __pow__(self, n: int) -> Polynomial:
-        """Raise the polynomial to a non-negative integer power.
+        """Raise the polynomial to a non-negative integer exponent.
 
         Args:
             n (int): The exponent. Must be a non-negative integer.
 
         Returns:
-            Polynomial: The polynomial raised to the power n.
+            Polynomial: The polynomial raised to the exponent n.
 
         Raises:
             ValueError: if n is not an integer, a negative integer, or if both
@@ -606,14 +608,14 @@ class Polynomial:
         return self.fast_exp(n)
 
     def fast_exp(self, n: int) -> Polynomial:
-        """Raise the polynomial to a non-negative integer power using
+        """Raise the polynomial to a non-negative integer exponent using
         exponentiation by squaring.
 
         Args:
             n (int): The exponent. Must be a non-negative integer.
 
         Returns:
-            Polynomial: The polynomial raised to the power n.
+            Polynomial: The polynomial raised to the exponent n.
 
         Raises:
             ValueError: if n is not an integer, a negative integer, or if both
@@ -642,14 +644,14 @@ class Polynomial:
         return p
 
     def slow_exp(self, n: int) -> Polynomial:
-        """Raise the polynomial to a non-negative integer power using
+        """Raise the polynomial to a non-negative integer exponent using
         naive exponentiation.
 
         Args:
             n (int): The exponent. Must be a non-negative integer.
 
         Returns:
-            Polynomial: The polynomial raised to the power n.
+            Polynomial: The polynomial raised to the exponent n.
 
         Raises:
             ValueError: if n is not an integer, a negative integer, or if both
@@ -721,7 +723,7 @@ class Polynomial:
         # that we're only ever performing at most d differentiations for a
         # d-degree polynomial. So it should be plenty fast enough.
         for _ in range(n):
-            p = Polynomial({(power - 1): power * coeff for power, coeff in p})
+            p = Polynomial({(exponent - 1): exponent * coeff for exponent, coeff in p})
         return p
 
     def antidiff(self, c: int | Fraction = 0) -> Polynomial:
@@ -744,7 +746,7 @@ class Polynomial:
         >>> print(p.antidiff(4))
         (1/3)x^3 + x^2 + 3x + 4
         """
-        terms = {power + 1: coeff / (power + 1) for power, coeff in self}
+        terms = {exponent + 1: coeff / (exponent + 1) for exponent, coeff in self}
         constant = Polynomial(c)
         antiderivative = Polynomial(terms) + constant
         return antiderivative
@@ -809,9 +811,9 @@ class Polynomial:
         """
         # Implements Horner's rule for evaluating a polynomial
         result = self.get(self.degree)
-        for power in range(self.degree - 1, -1, -1):
+        for exponent in range(self.degree - 1, -1, -1):
             result *= x
-            result += self.get(power)
+            result += self.get(exponent)
         if isinstance(x, float):
             return float(x)
         if result.is_integer():
@@ -828,7 +830,7 @@ class Polynomial:
         Returns:
             int | float | Fraction: the computed value.
         """
-        result = sum((coeff * x**power for power, coeff in self))
+        result = sum((coeff * x**exponent for exponent, coeff in self))
         if isinstance(x, float):
             return float(x)
         if result.is_integer():
@@ -903,7 +905,7 @@ class Polynomial:
         # coefficients. This lets us efficiently substitute the `other`
         # polynomial in for the variables in `self`.
         result = Polynomial(self.get(self.degree))
-        for power in range(self.degree - 1, -1, -1):
+        for exponent in range(self.degree - 1, -1, -1):
             result *= other
-            result += Polynomial(self.get(power))
+            result += Polynomial(self.get(exponent))
         return result
