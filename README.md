@@ -45,13 +45,10 @@ print(p)
 You can also use the built-in constructors:
 
 ```python
-zero = Polynomial.zero()       # 0
-one = Polynomial.one()         # 1
-identity = Polynomial.identity()  # x
-
-monomial = Polynomial.monomial(3, 2)
-print(monomial)
-# 2x^3
+zero = Polynomial.zero()             # 0
+one = Polynomial.one()               # 1
+identity = Polynomial.identity()     # x
+monomial = Polynomial.monomial(3, 2) # 2x^3
 ```
 
 ### 2. Arithmetic
@@ -255,7 +252,7 @@ if p:
 ```
 
 The zero polynomial has degree `-1` and evaluates to `False` when used as a
-boolean.
+boolean. All other polynomials evaluate to `True` in a boolean context.
 
 ### 9. Polynomial composition
 
@@ -276,18 +273,15 @@ print(p.compose(q))
 # 6x^2 + 1
 ```
 
-The `<<` operator is an alternative syntax for composition:
+The `<<` and `>>` operators are an alternative syntax for composition:
 
 ```python
-print(p << q)
-# 6x^2 + 1
-
-print(q << p)
-# 12x^2 + 12x + 3
+assert (p << q) == p.compose(q) #  6x^2 + 1
+assert (p >> q) == q.compose(p) # 12x^2 + 12x + 3
 ```
 
-Note that composition is not commutative: generally, `p << q` is not equal to
-`q << p`.
+Note that composition is not commutative: generally, `p.compose(q)` is not
+equal to `q.compose(p)`.
 
 ### 10. Evaluating polynomials
 
