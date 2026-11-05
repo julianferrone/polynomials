@@ -457,7 +457,7 @@ class Polynomial:
 
                 r = Polynomial.zero()
                 for i in range(2 * n + 1):
-                    r[i] = r1[i] + r4[i - m] + r2[i - 2 * m]
+                    r[i] = r1.get(i) + r4.get(i - m) + r2.get(i - 2 * m)
                 values.append(r)
         return values.pop()
 
@@ -807,10 +807,10 @@ class Polynomial:
             int | float | Fraction: the computed value.
         """
         # Implements Horner's rule for evaluating a polynomial
-        result = self[self.degree]
+        result = self.get(self.degree)
         for power in range(self.degree - 1, -1, -1):
             result *= x
-            result += self[power]
+            result += self.get(power)
         if isinstance(x, float):
             return float(x)
         if result.is_integer():
@@ -901,8 +901,8 @@ class Polynomial:
         # multiplication and addition on polynomials instead of fractional
         # coefficients. This lets us efficiently substitute the `other`
         # polynomial in for the variables in `self`.
-        result = Polynomial(self[self.degree])
+        result = Polynomial(self.get(self.degree))
         for power in range(self.degree - 1, -1, -1):
             result *= other
-            result += Polynomial(self[power])
+            result += Polynomial(self.get(power))
         return result
